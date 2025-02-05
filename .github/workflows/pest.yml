@@ -1,0 +1,29 @@
+name: Run Pest Tests
+
+on: [ push ]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: true
+            matrix:
+                php: [ 8.2 ]
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Set up PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: mbstring, bcmath
+
+            -   name: Install dependencies
+                run: |
+                    composer install
+
+            -   name: Run Pest tests
+                run: |
+                    ./vendor/bin/pest
