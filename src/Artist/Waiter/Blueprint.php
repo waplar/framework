@@ -2,9 +2,9 @@
 
 namespace Artist\Waiter;
 
+use Artist\Waiter\Schema\ColumnDefinition;
 use Closure;
 use Illuminate\Support\Fluent;
-use Artist\Waiter\Schema\ColumnDefinition;
 
 /**
  * Blueprint class
@@ -31,8 +31,8 @@ class Blueprint
     /**
      * Construct a Blueprint instance
      *
-     * @param  string  $table
-     * @param  string  $prefix
+     * @param string $table
+     * @param string $prefix
      */
     public function __construct(
         protected string $table,
@@ -44,8 +44,8 @@ class Blueprint
     /**
      * Column definition as a group
      *
-     * @param  ColumnDefinition[]                                           $columns
-     * @param  Closure(Schema\ColumnDefinition): (Schema\ColumnDefinition)  $callback
+     * @param ColumnDefinition[]                                          $columns
+     * @param Closure(Schema\ColumnDefinition): (Schema\ColumnDefinition) $callback
      *
      * @return void
      */
@@ -74,9 +74,9 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
-     * @param  bool    $autoIncrement
-     * @param  bool    $unsigned
+     * @param string $column
+     * @param bool   $autoIncrement
+     * @param bool   $unsigned
      *
      * @return Schema\ColumnDefinition
      */
@@ -95,9 +95,9 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $type
-     * @param  string  $name
-     * @param  array   $parameters
+     * @param string $type
+     * @param string $name
+     * @param array  $parameters
      *
      * @return Schema\ColumnDefinition
      */
@@ -113,9 +113,9 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
-     * @param  bool    $autoIncrement
-     * @param  bool    $unsigned
+     * @param string $column
+     * @param bool   $autoIncrement
+     * @param bool   $unsigned
      *
      * @return Schema\ColumnDefinition
      */
@@ -130,7 +130,7 @@ class Blueprint
     /**
      * Create a new tiny text column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return Schema\ColumnDefinition
      */
@@ -142,7 +142,7 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return Schema\ColumnDefinition
      */
@@ -154,8 +154,8 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string    $column
-     * @param  int|null  $length
+     * @param string   $column
+     * @param int|null $length
      *
      * @return Schema\ColumnDefinition
      */
@@ -207,7 +207,7 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return Fluent
      */
@@ -219,8 +219,8 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $name
-     * @param  array   $parameters
+     * @param string $name
+     * @param array  $parameters
      *
      * @return Fluent
      */
@@ -234,8 +234,8 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $name
-     * @param  array   $parameters
+     * @param string $name
+     * @param array  $parameters
      *
      * @return Fluent
      */

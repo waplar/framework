@@ -3,7 +3,8 @@
 if (!function_exists('artist_path')) {
     /**
      * The artist's path
-     * @param  string  $path
+     *
+     * @param string $path
      *
      * @return string
      */
@@ -16,7 +17,8 @@ if (!function_exists('artist_path')) {
 if (!function_exists('waiter_path')) {
     /**
      * The waiter's path
-     * @param  string  $path
+     *
+     * @param string $path
      *
      * @return string
      */

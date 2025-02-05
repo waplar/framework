@@ -2,12 +2,12 @@
 
 namespace Artist\Waiter;
 
-use Closure;
-use Illuminate\Support\Str;
-use Illuminate\Support\Fluent;
-use Artist\Waiter\Schema\ModelDefinition;
-use Laravel\SerializableClosure\SerializableClosure;
 use Artist\Foundation\Waiter\Hook\Migration as MigrationHook;
+use Artist\Waiter\Schema\ModelDefinition;
+use Closure;
+use Illuminate\Support\Fluent;
+use Illuminate\Support\Str;
+use Laravel\SerializableClosure\SerializableClosure;
 
 class Waiter
 {
@@ -22,7 +22,7 @@ class Waiter
     /**
      * Construct a Waiter instance
      *
-     * @param  Fluent  $params
+     * @param Fluent $params
      */
     private function __construct(Fluent $params)
     {
@@ -64,9 +64,9 @@ class Waiter
     /**
      * Configuration table information
      *
-     * @param  string  $name
-     * @param  string  $comment
-     * @param  string  $prefix
+     * @param string $name
+     * @param string $comment
+     * @param string $prefix
      *
      * @return static
      */
@@ -86,38 +86,11 @@ class Waiter
     }
 
     /**
-     * Generate the namespace and class name from the table name
-     *
-     * @param  string  $tableName
-     *
-     * @return array
-     */
-    private function resolveClassFromTable(string $tableName): array
-    {
-        $table = Str::of($tableName)->explode('_');
-
-        if ($table->count() === 0) {
-            return [Str::of($tableName)->toString(), ''];
-        }
-
-        if ($table->count() <= 2) {
-            return [Str::of($tableName)->studly()->toString(), ''];
-        }
-
-        $classname = Str::of($table->take(-2)->implode('_'))->studly()->toString();
-        $namespace = $table->slice(0, $table->count() - 2)->map(function (string $str) {
-            return Str::of($str)->studly();
-        })->implode('\\');
-
-        return [$classname, $namespace];
-    }
-
-    /**
      * Configuration summary information
      *
-     * @param  string|null  $namespace
-     * @param  string|null  $classname
-     * @param  string|null  $comment
+     * @param string|null $namespace
+     * @param string|null $classname
+     * @param string|null $comment
      *
      * @return static
      */
@@ -134,10 +107,10 @@ class Waiter
     /**
      * Configuration model information
      *
-     * @param  string       $extends
-     * @param  string|null  $namespace
-     * @param  string|null  $classname
-     * @param  string|null  $comment
+     * @param string      $extends
+     * @param string|null $namespace
+     * @param string|null $classname
+     * @param string|null $comment
      *
      * @return static
      */
@@ -160,9 +133,9 @@ class Waiter
     /**
      * Configuration migration information
      *
-     * @param  string|null  $filename
-     * @param  string|null  $comment
-     * @param  string       $hook
+     * @param string|null $filename
+     * @param string|null $comment
+     * @param string      $hook
      *
      * @return static
      */
@@ -182,7 +155,7 @@ class Waiter
     /**
      * Configuration model definition information
      *
-     * @param  ModelDefinition  $definition
+     * @param ModelDefinition $definition
      *
      * @return static
      */
@@ -201,8 +174,8 @@ class Waiter
     /**
      * Configuration schema information
      *
-     * @param  Closure  $up
-     * @param  Closure  $down
+     * @param Closure $up
+     * @param Closure $down
      *
      * @return static
      */
@@ -217,6 +190,33 @@ class Waiter
         );
 
         return $this;
+    }
+
+    /**
+     * Generate the namespace and class name from the table name
+     *
+     * @param string $tableName
+     *
+     * @return array
+     */
+    private function resolveClassFromTable(string $tableName): array
+    {
+        $table = Str::of($tableName)->explode('_');
+
+        if ($table->count() === 0) {
+            return [Str::of($tableName)->toString(), ''];
+        }
+
+        if ($table->count() <= 2) {
+            return [Str::of($tableName)->studly()->toString(), ''];
+        }
+
+        $classname = Str::of($table->take(-2)->implode('_'))->studly()->toString();
+        $namespace = $table->slice(0, $table->count() - 2)->map(function (string $str) {
+            return Str::of($str)->studly();
+        })->implode('\\');
+
+        return [$classname, $namespace];
     }
 
 }

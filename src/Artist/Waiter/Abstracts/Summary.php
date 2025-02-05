@@ -11,7 +11,7 @@ abstract class Summary implements \Artist\Waiter\Contracts\Summary
     /**
      * Gets meta information for the specified column
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return array
      */

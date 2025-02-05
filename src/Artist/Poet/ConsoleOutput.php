@@ -8,8 +8,8 @@ class ConsoleOutput extends \Symfony\Component\Console\Output\ConsoleOutput
 {
 
     /**
-     * @param  iterable|string  $messages
-     * @param  int              $options
+     * @param iterable|string $messages
+     * @param int             $options
      */
     public function writeln(iterable|string $messages, int $options = 0): void
     {
@@ -19,7 +19,17 @@ class ConsoleOutput extends \Symfony\Component\Console\Output\ConsoleOutput
     }
 
     /**
-     * @param  string  $message
+     * @param string|iterable $messages
+     * @param bool            $newline
+     * @param int             $options
+     */
+    public function write(string|iterable $messages, bool $newline = false, int $options = 0): void
+    {
+        parent::write($messages, $newline, $options);
+    }
+
+    /**
+     * @param string $message
      *
      * @return string
      */
@@ -28,16 +38,6 @@ class ConsoleOutput extends \Symfony\Component\Console\Output\ConsoleOutput
         return Str::of($message)->explode("\n")->map(function (string $line) {
             return Str::repeat(' ', 1) . $line;
         })->implode("\n");
-    }
-
-    /**
-     * @param  string|iterable  $messages
-     * @param  bool             $newline
-     * @param  int              $options
-     */
-    public function write(string|iterable $messages, bool $newline = false, int $options = 0): void
-    {
-        parent::write($messages, $newline, $options);
     }
 
 }

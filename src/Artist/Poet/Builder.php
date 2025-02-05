@@ -31,8 +31,8 @@ class Builder
     protected OutputInterface $output;
 
     /**
-     * @param  array  $styles
-     * @param  array  $config
+     * @param array $styles
+     * @param array $config
      */
     public function __construct(array $styles, array $config)
     {
@@ -42,8 +42,8 @@ class Builder
     }
 
     /**
-     * @param  string  $content
-     * @param  array   $styles
+     * @param string $content
+     * @param array  $styles
      *
      * @return string
      */
@@ -53,8 +53,18 @@ class Builder
     }
 
     /**
-     * @param  array   $styles
-     * @param  string  $message
+     * @param string $type
+     *
+     * @return string
+     */
+    public function color(string $type): string
+    {
+        return $this->config[__FUNCTION__][$type] ?? '255,255,255';
+    }
+
+    /**
+     * @param array  $styles
+     * @param string $message
      *
      * @return string
      */
@@ -83,16 +93,6 @@ class Builder
         });
 
         return implode('', [...$style, $message, "\033[0m",]);
-    }
-
-    /**
-     * @param  string  $type
-     *
-     * @return string
-     */
-    public function color(string $type): string
-    {
-        return $this->config[__FUNCTION__][$type] ?? '255,255,255';
     }
 
 }

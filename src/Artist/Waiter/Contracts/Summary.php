@@ -18,7 +18,7 @@ interface Summary
     /**
      * Gets meta information for the specified column
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return array
      */

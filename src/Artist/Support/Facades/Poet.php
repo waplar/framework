@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Poet facade
  *
- * @method static void content(string $title, string $content, array $emphasize = [])
- * @method static void note(string $message, array $emphasize = [], bool $tag = true)
- * @method static void warn(string $message, array $emphasize = [], bool $tag = true)
- * @method static void fail(string $message, array $emphasize = [], bool $tag = true)
- * @method static void succeed(string $message, array $emphasize = [], bool $tag = true)
+ * @method static void   content(string $title, string $content, array $emphasize = [])
+ * @method static void   note(string $message, array $emphasize = [], bool $tag = true)
+ * @method static void   warn(string $message, array $emphasize = [], bool $tag = true)
+ * @method static void   fail(string $message, array $emphasize = [], bool $tag = true)
+ * @method static void   succeed(string $message, array $emphasize = [], bool $tag = true)
  * @method static string text(string $content, array $styles = [])
  * @method static string color(string $type)
  *

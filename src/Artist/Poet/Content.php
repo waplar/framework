@@ -13,9 +13,9 @@ trait Content
     private int $length = 150;
 
     /**
-     * @param  string  $title
-     * @param  string  $content
-     * @param  array   $emphasize
+     * @param string $title
+     * @param string $content
+     * @param array  $emphasize
      */
     public function content(string $title, string $content, array $emphasize = []): void
     {
@@ -29,7 +29,7 @@ trait Content
     }
 
     /**
-     * @param  string  $title
+     * @param string $title
      *
      * @return string
      */
@@ -48,7 +48,7 @@ trait Content
     }
 
     /**
-     * @param  string  $value
+     * @param string $value
      *
      * @return int
      */
@@ -60,7 +60,7 @@ trait Content
     }
 
     /**
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
@@ -70,7 +70,7 @@ trait Content
     }
 
     /**
-     * @param  string  $content
+     * @param string $content
      *
      * @return string
      */

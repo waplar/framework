@@ -2,14 +2,14 @@
 
 namespace Artist\Waiter;
 
-use Closure;
-use Illuminate\Support\Str;
 use Artist\Support\Facades\Poet;
+use Closure;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\App;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class Scheduler
@@ -26,6 +26,23 @@ class Scheduler
     public function __construct()
     {
         $this->register();
+    }
+
+    /**
+     * Handle scheduler
+     *
+     * @param array $params
+     *
+     * @return mixed
+     */
+    public function handle(array $params): mixed
+    {
+        return app(Pipeline::class)
+            ->send($params)
+            ->through($this->pipes)
+            ->then(function (int $code) {
+                return $code;
+            });
     }
 
     /**
@@ -253,9 +270,9 @@ class Scheduler
     }
 
     /**
-     * @param  array  $params
-     * @param  array  $configure
-     * @param  array  $table
+     * @param array $params
+     * @param array $configure
+     * @param array $table
      *
      * @return array
      */
@@ -278,9 +295,9 @@ class Scheduler
     }
 
     /**
-     * @param  array  $params
-     * @param  array  $configure
-     * @param  array  $table
+     * @param array $params
+     * @param array $configure
+     * @param array $table
      *
      * @return array
      */
@@ -297,9 +314,9 @@ class Scheduler
     }
 
     /**
-     * @param  array  $params
-     * @param  array  $configure
-     * @param  array  $table
+     * @param array $params
+     * @param array $configure
+     * @param array $table
      *
      * @return array
      */
@@ -316,9 +333,9 @@ class Scheduler
     }
 
     /**
-     * @param  string  $suffixClassname
-     * @param  string  $namespace
-     * @param  array   $configure
+     * @param string $suffixClassname
+     * @param string $namespace
+     * @param array  $configure
      *
      * @return string
      */
@@ -333,23 +350,6 @@ class Scheduler
         $filepath[] = $suffixClassname . '.' . $configure['suffix']['file'];
 
         return implode(DIRECTORY_SEPARATOR, $filepath);
-    }
-
-    /**
-     * Handle scheduler
-     *
-     * @param  array  $params
-     *
-     * @return mixed
-     */
-    public function handle(array $params): mixed
-    {
-        return app(Pipeline::class)
-            ->send($params)
-            ->through($this->pipes)
-            ->then(function (int $code) {
-                return $code;
-            });
     }
 
 }

@@ -45,7 +45,7 @@ class Manager
     }
 
     /**
-     * @param  string  $uuid
+     * @param string $uuid
      *
      * @return string
      */
@@ -55,7 +55,7 @@ class Manager
     }
 
     /**
-     * @param  string  $uuid
+     * @param string $uuid
      *
      * @return string
      */
@@ -65,8 +65,8 @@ class Manager
     }
 
     /**
-     * @param  string  $uuid
-     * @param  array   $value
+     * @param string $uuid
+     * @param array  $value
      *
      * @return static
      */
@@ -78,8 +78,8 @@ class Manager
     }
 
     /**
-     * @param  string  $uuid
-     * @param  string  $value
+     * @param string $uuid
+     * @param string $value
      *
      * @return static
      */
@@ -91,8 +91,8 @@ class Manager
     }
 
     /**
-     * @param  string  $uuid
-     * @param  string  $value
+     * @param string $uuid
+     * @param string $value
      *
      * @return static
      */
