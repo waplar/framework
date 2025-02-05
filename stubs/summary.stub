@@ -1,0 +1,60 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ summaryPackage }};
+
+/**
+ * {{ comment }}
+ */
+class {{ classname }} extends Summary
+{
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    public const TABLE = '{{ table }}';
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    public const PRIMARY_KEY = {{ primaryKey }};
+
+    /**
+     * Column properties that need to be hidden
+     *
+     * @var array<int, string>
+     */
+    public const HIDDEN = [{{ hidden }}];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    public const FILLABLE = [{{ fillable }}];
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array<int, string>
+     */
+    public const GUARDED = [{{ guarded }}];
+
+    {{ columnConstants }}
+
+    /**
+     * Gets meta information for all columns
+     *
+     * @return array
+     */
+    final public function getMetas(): array
+    {
+        return {{ metaColumns }};
+    }
+
+}

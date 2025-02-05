@@ -1,0 +1,121 @@
+<?php
+
+namespace {{ namespace }};
+
+use Closure;
+use Artist\Waiter\Contracts\Summary;
+use Artist\Waiter\Concerns\HasEvents;
+use Illuminate\Database\Eloquent\Scope;
+
+use {{ summary }} as TheSummary;
+use {{ extends }} as Model;
+
+{{ usePackages }}
+
+/**
+ * {{ comment }}
+ */
+class {{ classname }} extends Model
+{
+
+    use HasEvents;
+
+    /**
+     * The model's default scopes.
+     *
+     * @var array<int|string, Scope|Closure>
+     */
+    protected static array $scopes = [];
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = {{ incrementing }};
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = {{ timestamps }};
+
+    /**
+     * Summary class
+     *
+     * @var Summary
+     */
+    protected Summary $summary;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = TheSummary::TABLE;
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = TheSummary::PRIMARY_KEY;
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = TheSummary::HIDDEN;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = TheSummary::FILLABLE;
+
+    /**
+     * Create an Eloquent model instance
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->summary = new TheSummary();
+
+        parent::__construct();
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    public function casts(): array
+    {
+        return {{ casts }};
+    }
+
+    /**
+     * Perform any actions required after the model boots.
+     *
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        // 设置查询全局作用域
+        // Set the global scope of the query
+        foreach (static::$scopes as $key => $scope) {
+            if (is_int($key) && $scope instanceof Scope) {
+                static::addGlobalScope($scope);
+            }
+
+            if (is_string($key) && $scope instanceof Closure) {
+                static::addGlobalScope($key, $scope);
+            }
+        }
+    }
+
+}

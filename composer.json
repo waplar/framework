@@ -1,0 +1,60 @@
+{
+    "name": "waplar/framework",
+    "description": "Based on laravel derived development framework.",
+    "license": "mit",
+    "autoload": {
+        "psr-4": {
+            "Artist\\": "src/Artist"
+        },
+        "files": [
+            "src/Artist/Foundation/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "KanekiYuto",
+            "email": "kaneki.yuto.404@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/waplar/framework/issues",
+        "source": "https://github.com/waplar/framework"
+    },
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^11.9"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Artist\\WaplarServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.68",
+        "laravel/pint": "^1.20",
+        "orchestra/testbench": "^9.9",
+        "pestphp/pest": "^3.7",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "spatie/laravel-ray": "^1.39"
+    }
+}

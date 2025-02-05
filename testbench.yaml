@@ -1,0 +1,7 @@
+providers:
+    - Artist\WaplarServiceProvider
+
+workbench:
+    start: '/waplar'
+    install: true
+    welcome: false
