@@ -24,6 +24,10 @@ jobs:
                 run: |
                     composer install
 
+            -   name: Run package resource installation
+                run: |
+                    ./vendor/bin/testbench vendor:publish --tag=waplar
+
             -   name: Run Pest tests
                 run: |
                     ./vendor/bin/pest
