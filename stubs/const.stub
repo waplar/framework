@@ -1,0 +1,6 @@
+/**
+ * {{ comment }}
+ *
+ * @var {{ @var }}
+ */
+public const {{ name }} = {{ value }};
