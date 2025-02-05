@@ -2,13 +2,13 @@
 
 namespace Artist\Waiter\Builders;
 
-use SplFileInfo;
-use PhpCsFixer\Config;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use PhpCsFixer\Config;
 use PhpCsFixer\FixerFactory;
 use PhpCsFixer\Tokenizer\Tokens;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use SplFileInfo;
 
 class Builder
 {
@@ -16,7 +16,7 @@ class Builder
     /**
      * The array is converted to code text
      *
-     * @param  array  $values
+     * @param array $values
      *
      * @return string
      */
@@ -56,7 +56,7 @@ class Builder
     /**
      * Stub file disk
      *
-     * @param  string|null  $path
+     * @param string|null $path
      *
      * @return Filesystem
      */
@@ -74,8 +74,8 @@ class Builder
     }
 
     /**
-     * @param  array   $params
-     * @param  string  $stub
+     * @param array  $params
+     * @param string $stub
      *
      * @return string
      */
@@ -91,9 +91,9 @@ class Builder
     /**
      * Fill parameter value
      *
-     * @param  string       $param
-     * @param  string|bool  $value
-     * @param  string       $stub
+     * @param string      $param
+     * @param string|bool $value
+     * @param string      $stub
      *
      * @return string
      */
@@ -110,7 +110,7 @@ class Builder
     /**
      * Format the code to be readable
      *
-     * @param  string  $content
+     * @param string $content
      *
      * @return string
      */

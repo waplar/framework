@@ -32,6 +32,16 @@ class WaplarServiceProvider extends ServiceProvider
         $this->registerFacades();
     }
 
+    /**
+     * Bootstrap service
+     */
+    public function boot(): void
+    {
+        $this->publishes([
+            dirname(__DIR__, 2) . '/config/waplar.php' => config_path('waplar.php'),
+        ], ['waplar', 'waplar-config']);
+    }
+
     protected function registerProviders(): void
     {
         collect($this->providers)->map(function (string $provider) {
@@ -60,16 +70,6 @@ class WaplarServiceProvider extends ServiceProvider
                 config('waplar.poet.config')
             );
         });
-    }
-
-    /**
-     * Bootstrap service
-     */
-    public function boot(): void
-    {
-        $this->publishes([
-            dirname(__DIR__, 2) . '/config/waplar.php' => config_path('waplar.php'),
-        ], ['waplar', 'waplar-config']);
     }
 
 }

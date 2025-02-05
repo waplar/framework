@@ -1,10 +1,10 @@
 <?php
 
+use Artist\Foundation\Database\Eloquent\Casts\AutoTimezone;
+use Artist\Waiter\Blueprint;
 use Artist\Waiter\Schema;
 use Artist\Waiter\Waiter;
-use Artist\Waiter\Blueprint;
 use Illuminate\Database\Eloquent\Model;
-use Artist\Foundation\Database\Eloquent\Casts\AutoTimezone;
 
 return Waiter::configure()->withTable(
     'case_four',

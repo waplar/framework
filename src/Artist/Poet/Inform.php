@@ -8,9 +8,9 @@ trait Inform
 {
 
     /**
-     * @param  string  $message
-     * @param  array   $emphasize
-     * @param  bool    $tag
+     * @param string $message
+     * @param array  $emphasize
+     * @param bool   $tag
      */
     public function warn(string $message, array $emphasize = [], bool $tag = true): void
     {
@@ -18,10 +18,10 @@ trait Inform
     }
 
     /**
-     * @param  string  $fn
-     * @param  string  $message
-     * @param  bool    $tag
-     * @param  array   $emphasize
+     * @param string $fn
+     * @param string $message
+     * @param bool   $tag
+     * @param array  $emphasize
      */
     public function build(string $fn, string $message, bool $tag, array $emphasize): void
     {
@@ -38,8 +38,38 @@ trait Inform
     }
 
     /**
-     * @param  array   $styles
-     * @param  string  $content
+     * @param string $message
+     * @param array  $emphasize
+     * @param bool   $tag
+     */
+    public function fail(string $message, array $emphasize = [], bool $tag = true): void
+    {
+        $this->build(__FUNCTION__, $message, $tag, $emphasize);
+    }
+
+    /**
+     * @param string $message
+     * @param array  $emphasize
+     * @param bool   $tag
+     */
+    public function note(string $message, array $emphasize = [], bool $tag = true): void
+    {
+        $this->build(__FUNCTION__, $message, $tag, $emphasize);
+    }
+
+    /**
+     * @param string $message
+     * @param array  $emphasize
+     * @param bool   $tag
+     */
+    public function succeed(string $message, array $emphasize = [], bool $tag = true): void
+    {
+        $this->build(__FUNCTION__, $message, $tag, $emphasize);
+    }
+
+    /**
+     * @param array  $styles
+     * @param string $content
      *
      * @return string
      */
@@ -49,8 +79,8 @@ trait Inform
     }
 
     /**
-     * @param  array   $styles
-     * @param  string  $content
+     * @param array  $styles
+     * @param string $content
      *
      * @return string
      */
@@ -60,44 +90,14 @@ trait Inform
     }
 
     /**
-     * @param  array   $styles
-     * @param  string  $content
+     * @param array  $styles
+     * @param string $content
      *
      * @return string
      */
     private function message(array $styles, string $content): string
     {
         return $this->style($styles['message'], $content);
-    }
-
-    /**
-     * @param  string  $message
-     * @param  array   $emphasize
-     * @param  bool    $tag
-     */
-    public function fail(string $message, array $emphasize = [], bool $tag = true): void
-    {
-        $this->build(__FUNCTION__, $message, $tag, $emphasize);
-    }
-
-    /**
-     * @param  string  $message
-     * @param  array   $emphasize
-     * @param  bool    $tag
-     */
-    public function note(string $message, array $emphasize = [], bool $tag = true): void
-    {
-        $this->build(__FUNCTION__, $message, $tag, $emphasize);
-    }
-
-    /**
-     * @param  string  $message
-     * @param  array   $emphasize
-     * @param  bool    $tag
-     */
-    public function succeed(string $message, array $emphasize = [], bool $tag = true): void
-    {
-        $this->build(__FUNCTION__, $message, $tag, $emphasize);
     }
 
 }

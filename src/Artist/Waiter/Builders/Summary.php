@@ -2,12 +2,12 @@
 
 namespace Artist\Waiter\Builders;
 
-use Closure;
-use Artist\Waiter\Manager;
-use Illuminate\Support\Str;
-use Illuminate\Pipeline\Pipeline;
-use Artist\Waiter\Schema\ColumnDefinition;
 use Artist\Waiter\Constants\Waiter as WaiterConstants;
+use Artist\Waiter\Manager;
+use Artist\Waiter\Schema\ColumnDefinition;
+use Closure;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Str;
 
 class Summary extends Builder
 {
@@ -15,8 +15,8 @@ class Summary extends Builder
     /**
      * Handle
      *
-     * @param  array    $params
-     * @param  Closure  $next
+     * @param array   $params
+     * @param Closure $next
      *
      * @return mixed
      */

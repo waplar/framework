@@ -2,20 +2,21 @@
 
 namespace Artist\Waiter\Console;
 
-use Closure;
-use Artist\Waiter\Manager;
-use Illuminate\Support\Str;
-use Artist\Waiter\Scheduler;
-use Illuminate\Console\Command;
+use Artist\Support\Console\Trait\ConfirmableTrait;
 use Artist\Support\Facades\Poet;
+use Artist\Waiter\Manager;
+use Artist\Waiter\Scheduler;
+use Closure;
+use Illuminate\Console\Command;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Artist\Support\Console\Trait\ConfirmableTrait;
-use Symfony\Component\Console\Command\Command as CommandAlias;
+use Illuminate\Support\Str;
 
-use function Laravel\Prompts\select;
 use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\select;
+
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 #[AsCommand(name: 'waplar:waiter')]
 class WaiterCommand extends Command
