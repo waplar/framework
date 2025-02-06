@@ -1,4 +1,4 @@
-# Code of Conduct (English edition)
+# Code of Conduct
 
 The **Waplar** code of conduct is derived from the **Laravel** code of conduct. Any violations of the code of conduct may be
 reported to **Kaneki Yuto** (kaneki.yuto.404@gmail.com):
@@ -10,7 +10,7 @@ reported to **Kaneki Yuto** (kaneki.yuto.404@gmail.com):
 - Behavior that can be reasonably considered harassment will not be tolerated.
 - Any political talk will not be tolerated.
 
-# 行为准则 (中文版)
+# 行为准则
 
 **Waplar** 行为准则源自 **Laravel** 行为准则。任何违反行为准则的行为都可以报告给 **Kaneki Yuto**
 （kaneki.yuto.404@gmail.com）：
