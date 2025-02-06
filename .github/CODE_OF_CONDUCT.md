@@ -12,7 +12,7 @@ reported to **Kaneki Yuto** (kaneki.yuto.404@gmail.com):
 
 # 行为准则 (中文版)
 
-**Waplar** 行为准则源自 **Laravel** 行为准则。任何违反行为准则的行为都可以报告给 **Yuto Kaneki**
+**Waplar** 行为准则源自 **Laravel** 行为准则。任何违反行为准则的行为都可以报告给 **Kaneki Yuto**
 （kaneki.yuto.404@gmail.com）：
 
 - 参与者将容忍反对意见。
