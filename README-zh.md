@@ -9,11 +9,8 @@
 
 # 语言
 
-<div align="center">
-
-**中文** | [English](README.md)
-
-</div>
+- **中文**
+- [English](README.md)
 
 ## 介绍
 
@@ -22,6 +19,10 @@ Waplar Framework 是一个依赖于 laravel 的开发框架，它在 laravel 之
 ## 官方文档
 
 暂未提供，正在编写。
+
+## Alpha 版本体验
+
+参阅[安装](ALPHA-INSTALLATION-zh.md)指南。
 
 ## 贡献
 

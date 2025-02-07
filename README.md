@@ -9,11 +9,8 @@
 
 # Language
 
-<div align="center">
-
-**English** | [中文](README-zh.md)
-
-</div>
+- **English**
+- [中文](README-zh.md)
 
 ## Introduction
 
@@ -23,6 +20,10 @@ complex applications.
 ## Official Documentation
 
 Not yet available, working on writing.
+
+## Alpha version experience
+
+See the [installation](ALPHA-INSTALLATION.md) Guide.
 
 ## Contributing
 
