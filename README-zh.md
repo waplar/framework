@@ -9,32 +9,30 @@
 
 <div align="center">
 
-**English** | [中文](README-zh.md)
+**中文** | [English](README.md)
 
 </div>
 
-## Introduction
+## 介绍
 
-Waplar framework is a framework that relies on laravel and provides more components on top of laravel to help you build
-complex applications.
+Waplar Framework 是一个依赖于 laravel 的开发框架，它在 laravel 之上提供了更多的组件来帮助你构建复杂的应用程序。
 
-## Official Documentation
+## 官方文档
 
-Not yet available, working on writing.
+暂未提供，正在编写。
 
-## Contributing
+## 贡献
 
-Thank you for contributing to the waplar framework.
+感谢您对 Waplar Framework 的贡献。
 
-## Code of Conduct
+## 行为准则
 
-To ensure harmony in the community, review and follow the code of
-conduct [Code of Conduct](.github/CODE_OF_CONDUCT.md).
+为确保社区内和谐，请查阅并遵守[行为准则](.github/CODE_OF_CONDUCT.md)。
 
-## Security Vulnerabilities
+## 安全漏洞
 
-Please review [our security policy](SECURITY.md) on how to report security vulnerabilities.
+请查看[我们的安全政策](SECURITY.md)，了解如何报告安全漏洞。
 
 ## License
 
-Waplar Framework is open-sourced software licensed under the [MIT license](LICENSE.md).
+Waplar Framework 是一款基于[MIT许可证]（LICENSE .md）的开源软件。
