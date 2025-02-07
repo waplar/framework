@@ -7,6 +7,8 @@
 <a href="https://packagist.org/packages/waplar/framework"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
 </div>
 
+---
+
 <div align="center">
 
 **中文** | [English](README.md)
@@ -33,6 +35,6 @@ Waplar Framework 是一个依赖于 laravel 的开发框架，它在 laravel 之
 
 请查看[我们的安全政策](SECURITY.md)，了解如何报告安全漏洞。
 
-## License
+## 许可证
 
 Waplar Framework 是一款基于[MIT许可证]（LICENSE .md）的开源软件。
