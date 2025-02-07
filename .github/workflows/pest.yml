@@ -1,7 +1,9 @@
 name: Run Pest Tests
 
-on: [ push ]
-
+on:
+    push:
+        branches:
+            - '*.x'
 jobs:
     test:
         runs-on: ubuntu-latest
