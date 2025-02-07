@@ -1,7 +1,7 @@
 {
     "name": "waplar/framework",
     "description": "Based on laravel derived development framework.",
-    "license": "mit",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Artist\\": "src/Artist"
@@ -38,7 +38,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.x-dev"
+            "dev-main": "alpha.x-dev"
         },
         "laravel": {
             "providers": [
