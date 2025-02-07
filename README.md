@@ -7,6 +7,8 @@
 <a href="https://packagist.org/packages/waplar/framework"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
 </div>
 
+# Language
+
 <div align="center">
 
 **English** | [中文](README-zh.md)
