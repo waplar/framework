@@ -4,7 +4,7 @@
 <a href="https://github.com/waplar/framework/actions"><img src="https://github.com/waplar/framework/actions/workflows/pest.yml/badge.svg?branch=alpha.x" alt="Test Status"></a>
 <a href="https://packagist.org/packages/waplar/framework"><img src="https://img.shields.io/packagist/dt/waplar/framework" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/waplar/framework"><img src="https://img.shields.io/packagist/v/waplar/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/waplar/framework"><img src="https://img.shields.io/packagist/l/waplar/framework" alt="License"></a>
+<a href="https://packagist.org/packages/waplar/framework"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
 </p>
 
 ## Introduction
