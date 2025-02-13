@@ -26,7 +26,7 @@ Waplar Framework 是一个依赖于 laravel 的开发框架，它在 laravel 之
 
 ## 贡献
 
-感谢您对 Waplar Framework 的贡献。
+**感谢迄今为止做出贡献的所有人！**
 
 ![Contributors](https://contrib.rocks/image?repo=waplar/framework)
 
