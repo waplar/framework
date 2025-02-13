@@ -28,6 +28,8 @@ Waplar Framework 是一个依赖于 laravel 的开发框架，它在 laravel 之
 
 感谢您对 Waplar Framework 的贡献。
 
+![Contributors](https://contrib.rocks/image?repo=waplar/framework)
+
 ## 行为准则
 
 为确保社区内和谐，请查阅并遵守[行为准则](.github/CODE_OF_CONDUCT.md)。
@@ -39,3 +41,4 @@ Waplar Framework 是一个依赖于 laravel 的开发框架，它在 laravel 之
 ## 许可证
 
 Waplar Framework 是一款基于[MIT许可证]（LICENSE .md）的开源软件。
+

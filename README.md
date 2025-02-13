@@ -29,6 +29,8 @@ See the [installation](ALPHA-INSTALLATION.md) Guide.
 
 Thank you for contributing to the waplar framework.
 
+![Contributors](https://contrib.rocks/image?repo=waplar/framework)
+
 ## Code of Conduct
 
 To ensure harmony in the community, review and follow the code of
