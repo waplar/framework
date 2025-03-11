@@ -12,7 +12,7 @@ readonly class Export
     /**
      * Construct derived instance
      *
-     * @param  array  $data
+     * @param array $data
      */
     public function __construct(private array $data = [])
     {
@@ -22,9 +22,9 @@ readonly class Export
     /**
      * Export in json format
      *
-     * @param  int    $status
-     * @param  array  $headers
-     * @param  int    $options
+     * @param int   $status
+     * @param array $headers
+     * @param int   $options
      *
      * @return Http\JsonResponse
      */
@@ -49,9 +49,9 @@ readonly class Export
     /**
      * Custom making export
      *
-     * @param  Closure  $content
-     * @param  int      $status
-     * @param  array    $headers
+     * @param Closure $content
+     * @param int     $status
+     * @param array   $headers
      *
      * @return Http\Response
      */
@@ -70,10 +70,10 @@ readonly class Export
     /**
      * Export in jsonp format
      *
-     * @param  string|null  $callback
-     * @param  int          $status
-     * @param  array        $headers
-     * @param  int          $options
+     * @param string|null $callback
+     * @param int         $status
+     * @param array       $headers
+     * @param int         $options
      *
      * @return Http\JsonResponse
      */

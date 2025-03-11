@@ -2,9 +2,9 @@
 
 namespace Artist\Preacher;
 
+use Artist\Support\Facades\Poet;
 use Closure;
 use stdClass;
-use Artist\Support\Facades\Poet;
 
 class Preacher
 {
@@ -15,7 +15,7 @@ class Preacher
     private static Closure $hook;
 
     /**
-     * @param  Closure  $callable
+     * @param Closure $callable
      */
     public static function useHook(Closure $callable): void
     {
@@ -23,7 +23,7 @@ class Preacher
     }
 
     /**
-     * @param  string  $msg
+     * @param string $msg
      *
      * @return Builder
      */
@@ -36,17 +36,7 @@ class Preacher
     }
 
     /**
-     * @return Closure
-     */
-    private static function getHook(): Closure
-    {
-        return self::$hook ?? function (string $msg, array $data) {
-            return [$msg, $data];
-        };
-    }
-
-    /**
-     * @param  array  $value
+     * @param array $value
      *
      * @return Builder
      */
@@ -56,7 +46,7 @@ class Preacher
     }
 
     /**
-     * @param  stdClass  $value
+     * @param stdClass $value
      *
      * @return Builder
      */
@@ -66,10 +56,10 @@ class Preacher
     }
 
     /**
-     * @param  int    $page
-     * @param  int    $prePage
-     * @param  int    $total
-     * @param  array  $rows
+     * @param int   $page
+     * @param int   $prePage
+     * @param int   $total
+     * @param array $rows
      *
      * @return Builder
      */
@@ -81,6 +71,16 @@ class Preacher
             total: $total,
             rows: $rows
         );
+    }
+
+    /**
+     * @return Closure
+     */
+    private static function getHook(): Closure
+    {
+        return self::$hook ?? function (string $msg, array $data) {
+            return [$msg, $data];
+        };
     }
 
 }

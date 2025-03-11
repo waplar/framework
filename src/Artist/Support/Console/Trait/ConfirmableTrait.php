@@ -2,9 +2,9 @@
 
 namespace Artist\Support\Console\Trait;
 
-use Closure;
-
 use Artist\Support\Facades\Poet;
+
+use Closure;
 
 use function Laravel\Prompts\confirm;
 
