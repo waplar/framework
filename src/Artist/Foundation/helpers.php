@@ -2,7 +2,8 @@
 
 if (!function_exists('artist_path')) {
     /**
-     * The artist's path
+     * Artist 目录地址
+     * The artist's dir path
      *
      * @param string $path
      *
@@ -16,7 +17,8 @@ if (!function_exists('artist_path')) {
 
 if (!function_exists('waiter_path')) {
     /**
-     * The waiter's path
+     * Waiter 目录地址
+     * The waiter's dir path
      *
      * @param string $path
      *

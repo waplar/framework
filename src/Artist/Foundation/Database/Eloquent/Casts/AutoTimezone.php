@@ -9,16 +9,12 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
-/**
- * [Eloquent - Cast] 自动时间转换
- *
- * @author KanekiYuto
- */
 class AutoTimezone implements CastsAttributes
 {
 
     /**
      * 对提取的数据进行转换
+     * The extracted data is transformed
      *
      * @param Model  $model
      * @param string $key
@@ -43,6 +39,7 @@ class AutoTimezone implements CastsAttributes
 
     /**
      * 转换为将被存储的值
+     * Convert to a value that will be stored
      *
      * @param Model  $model
      * @param string $key

@@ -5,11 +5,6 @@ namespace Artist\Foundation\Database\Eloquent\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * [Eloquent] cast abstract class
- *
- * @author KanekiYuto
- */
 abstract class Cast implements CastsAttributes
 {
 
