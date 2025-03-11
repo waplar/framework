@@ -1,13 +1,8 @@
 <?php
 
-namespace Artist\Preacher\Response;
+namespace Artist\Preacher\Constants;
 
-/**
- * Response status code
- *
- * @author KanekiYuto
- */
-class Code
+class CodeStatus
 {
 
     /**

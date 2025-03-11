@@ -9,8 +9,6 @@ use Illuminate\Support\Fluent;
  *
  * @method $this incrementing(bool $value = true)
  * @method $this timestamps(bool $value = false)
- *
- * @author KanekiYuto
  */
 class ModelDefinition extends Fluent
 {

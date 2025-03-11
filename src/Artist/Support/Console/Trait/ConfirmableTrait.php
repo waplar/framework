@@ -4,19 +4,16 @@ namespace Artist\Support\Console\Trait;
 
 use Closure;
 
-use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\warning;
+use Artist\Support\Facades\Poet;
 
-/**
- * 命令行确认
- *
- * @author KanekiYuto
- */
+use function Laravel\Prompts\confirm;
+
 trait ConfirmableTrait
 {
 
     /**
      * 继续前确认
+     * Confirm before proceeding
      *
      * @param string            $warning
      * @param bool|Closure|null $callback
@@ -24,7 +21,7 @@ trait ConfirmableTrait
      * @return bool
      */
     public function confirmToProceed(
-        string $warning = '该应用程序目前处于生产状态！',
+        string $warning = 'The application is currently in production!',
         bool|Closure $callback = null
     ): bool {
         $callback = is_null($callback) ? $this->getDefaultConfirmCallback() : $callback;
@@ -36,12 +33,12 @@ trait ConfirmableTrait
                 return true;
             }
 
-            warning($warning);
+            Poet::warn($warning);
 
-            $confirmed = confirm('您确定要运行这个命令吗？', default: false);
+            $confirmed = confirm('Are you sure you want to run this command?', default: false);
 
             if (!$confirmed) {
-                $this->components->warn('取消。');
+                $this->components->warn('Cancel.');
 
                 return false;
             }
@@ -52,6 +49,7 @@ trait ConfirmableTrait
 
     /**
      * 获取默认确认回调
+     * Gets the default confirmation callback
      *
      * @return Closure
      */
@@ -59,6 +57,7 @@ trait ConfirmableTrait
     {
         return function () {
             // 确定当前环境是否在生产中
+            // Determine whether the current environment is in production
             return $this->getLaravel()->environment() === 'production';
         };
     }

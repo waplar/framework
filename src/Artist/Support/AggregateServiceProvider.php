@@ -8,6 +8,7 @@ class AggregateServiceProvider extends ServiceProvider
 {
 
     /**
+     * 服务提供者类名称数组
      * The provider class names.
      *
      * @var array
@@ -15,6 +16,7 @@ class AggregateServiceProvider extends ServiceProvider
     protected array $providers = [];
 
     /**
+     * 服务提供者实例的数组
      * An array of the service provider instances.
      *
      * @var array
@@ -22,6 +24,7 @@ class AggregateServiceProvider extends ServiceProvider
     protected array $instances = [];
 
     /**
+     * 注册服务提供者
      * Register the service provider.
      *
      * @return void
@@ -36,6 +39,7 @@ class AggregateServiceProvider extends ServiceProvider
     }
 
     /**
+     * 获取服务提供者提供的服务
      * Get the services provided by the provider.
      *
      * @return array

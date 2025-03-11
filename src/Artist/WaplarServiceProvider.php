@@ -54,16 +54,6 @@ class WaplarServiceProvider extends ServiceProvider
      */
     protected function registerFacades(): void
     {
-        $this->app->bind(Support\Facades\Preacher::FACADE_ACCESSOR, function () {
-            $instance = new Preacher\ResponseFactory();
-
-            $instance->useHook(function (Preacher\ResponseFactory $instance) {
-                return $instance;
-            });
-
-            return $instance;
-        });
-
         $this->app->bind(Support\Facades\Poet::FACADE_ACCESSOR, function () {
             return new Poet\Builder(
                 config('waplar.poet.styles'),

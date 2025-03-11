@@ -4,7 +4,6 @@ namespace Artist\Waiter\Console;
 
 use Artist\Support\Console\Trait\ConfirmableTrait;
 use Artist\Support\Facades\Poet;
-use Artist\Waiter\Manager;
 use Artist\Waiter\Scheduler;
 use Closure;
 use Illuminate\Console\Command;
