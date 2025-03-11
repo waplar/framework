@@ -1,54 +1,25 @@
 <?php
 
-use Artist\Preacher\Response\Code;
-use Artist\Preacher\Response\DefaultSetting;
-use Artist\Preacher\ResponseFactory;
-use Artist\Support\Facades\Preacher;
-use Illuminate\Support\Facades\Facade;
+use Artist\Preacher\Preacher;
 
 beforeEach(function () {
-    Facade::setFacadeApplication(app());
+    Artist\Preacher\Preacher::useHook(function (string $msg, array $data) {
+        if ($msg === 'The value in the value is multiplied by two') {
+            $data['rows'] = collect($data['rows'])->map(function (int $value) {
+                return $value * 2;
+            })->toArray();
+        }
 
-    app()->bind(Preacher::FACADE_ACCESSOR, function () {
-        return new ResponseFactory(function (ResponseFactory $instance) {
-            $instance->setMsg('global-hooked-' . $instance->getMsg());
-        });
+        return ["pest-$msg", $data];
     });
 });
 
-it('Tests the facade instance for contamination', function () {
-    Preacher::msg('test');
-
-    expect(Preacher::base()->getMsg())->not()->toBe('test');
-});
-
-it('Simulated facade', function () {
-    expect(app()->bound(Preacher::FACADE_ACCESSOR))->toBeTrue();
-});
-
-it('Basic testing', function () {
-    $cases = collect()
-        ->push(Preacher::base()->export()->array())
-        ->push(Preacher::msg('test')->export()->array()[DefaultSetting::KEY_MESSAGE])
-        ->push(Preacher::code(Code::SUCCEED)->export()->array()[DefaultSetting::KEY_CODE]);
-
-    expect($cases[0])
-        ->toHaveKeys([DefaultSetting::KEY_CODE, DefaultSetting::KEY_STATUS, DefaultSetting::KEY_MESSAGE])
-        ->and($cases[1])
-        ->toBe('global-hooked-test')
-        ->and($cases[2])
-        ->toBe(Code::SUCCEED);
-});
-
-it('Test whether the Hook works', function () {
-    $cases = collect()
-        ->push(Preacher::msg('test')->export()->array()[DefaultSetting::KEY_MESSAGE])
-        ->push(Preacher::msg('test')->useHook(function (ResponseFactory $instance) {
-            $instance->setMsg('hooked-' . $instance->getMsg());
-        })->export()->array()[DefaultSetting::KEY_MESSAGE])->all();
-
-    expect($cases[0])
-        ->toBe('global-hooked-test')
-        ->and($cases[1])
-        ->toBe('hooked-test');
+it('Tests whether the hook is valid', function () {
+    expect(
+        Preacher::basic('test')->getMsg()
+    )->toBe('pest-test')->and(
+        Preacher::rows([1, 2, 3,])->setMsg(
+            'The value in the value is multiplied by two'
+        )->getRows()
+    )->toBe([2, 4, 6]);
 });

@@ -27,7 +27,7 @@ See the [installation](ALPHA-INSTALLATION.md) Guide.
 
 ## Contributing
 
-Thank you for contributing to the waplar framework.
+**Thanks to all the people who contributed so far!**
 
 ![Contributors](https://contrib.rocks/image?repo=waplar/framework)
 

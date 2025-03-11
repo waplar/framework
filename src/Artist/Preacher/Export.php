@@ -2,14 +2,10 @@
 
 namespace Artist\Preacher;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Response as ResponseFactory;
+use Closure;
+use Illuminate\Http;
+use Illuminate\Support\Facades\Response;
 
-/**
- * Export preacher response
- *
- * @author KanekiYuto
- */
 readonly class Export
 {
 
@@ -20,28 +16,28 @@ readonly class Export
      */
     public function __construct(private array $data = [])
     {
-        // Do it...
+        // ...
     }
 
     /**
-     * Export as json
+     * Export in json format
      *
      * @param int   $status
      * @param array $headers
      * @param int   $options
      *
-     * @return JsonResponse
+     * @return Http\JsonResponse
      */
     public function json(
-        int $status = Response\DefaultSetting::HTTP_STATUS,
+        int $status = Constants\DefaultSetting::HTTP_STATUS,
         array $headers = [],
-        int $options = Response\DefaultSetting::JSON_OPTIONS
-    ): JsonResponse {
-        return ResponseFactory::json(self::array(), $status, $headers, $options);
+        int $options = Constants\DefaultSetting::JSON_OPTIONS
+    ): Http\JsonResponse {
+        return Response::json(self::array(), $status, $headers, $options);
     }
 
     /**
-     * Export the data in array format
+     * Array format export
      *
      * @return array
      */
@@ -51,22 +47,43 @@ readonly class Export
     }
 
     /**
-     * Export as jsonp
+     * Custom making export
+     *
+     * @param Closure $content
+     * @param int     $status
+     * @param array   $headers
+     *
+     * @return Http\Response
+     */
+    public function make(
+        Closure $content,
+        int $status = Constants\DefaultSetting::HTTP_STATUS,
+        array $headers = []
+    ): Http\Response {
+        return Response::make(
+            $content(self::array()),
+            $status,
+            $headers
+        );
+    }
+
+    /**
+     * Export in jsonp format
      *
      * @param string|null $callback
      * @param int         $status
      * @param array       $headers
      * @param int         $options
      *
-     * @return JsonResponse
+     * @return Http\JsonResponse
      */
     public function jsonp(
         string|null $callback = null,
-        int $status = Response\DefaultSetting::HTTP_STATUS,
+        int $status = Constants\DefaultSetting::HTTP_STATUS,
         array $headers = [],
-        int $options = Response\DefaultSetting::JSON_OPTIONS
-    ): JsonResponse {
-        return ResponseFactory::jsonp(
+        int $options = Constants\DefaultSetting::JSON_OPTIONS
+    ): Http\JsonResponse {
+        return Response::jsonp(
             $callback,
             self::array(),
             $status,

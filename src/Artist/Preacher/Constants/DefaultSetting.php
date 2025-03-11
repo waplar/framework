@@ -1,6 +1,6 @@
 <?php
 
-namespace Artist\Preacher\Response;
+namespace Artist\Preacher\Constants;
 
 class DefaultSetting
 {
@@ -10,14 +10,7 @@ class DefaultSetting
      *
      * @var string
      */
-    public const KEY_CODE = 'code';
-
-    /**
-     * Default service status code key name
-     *
-     * @var string
-     */
-    public const KEY_STATUS = 'status';
+    public const KEY_STATUS_CODE = 'code';
 
     /**
      * Default message key name
@@ -31,7 +24,7 @@ class DefaultSetting
      *
      * @var int
      */
-    public const HTTP_STATUS = 200;
+    public const HTTP_STATUS = HttpStatus::SUCCEED;
 
     /**
      * Default JSON option
