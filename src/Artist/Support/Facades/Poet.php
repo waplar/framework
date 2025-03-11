@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static void   succeed(string $message, array $emphasize = [], bool $tag = true)
  * @method static string text(string $content, array $styles = [])
  * @method static string color(string $type)
- *
- * @author KanekiYuto
  */
 class Poet extends Facade
 {

@@ -6,11 +6,6 @@ use Artist\Waiter\Schema\ColumnDefinition;
 use Closure;
 use Illuminate\Support\Fluent;
 
-/**
- * Blueprint class
- *
- * @author KanekiYuto
- */
 class Blueprint
 {
 

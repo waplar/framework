@@ -4,11 +4,6 @@ namespace Artist\Waiter\Contracts\Hook;
 
 use Artist\Waiter\Abstracts\Summary;
 
-/**
- * Migration hook interface
- *
- * @author KanekiYuto
- */
 interface Migration
 {
 

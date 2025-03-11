@@ -4,11 +4,6 @@ namespace Artist\Waiter\Abstracts\Hook;
 
 use Artist\Waiter\Abstracts\Summary;
 
-/**
- * Abstract layer
- *
- * @author KanekiYuto
- */
 abstract class Migration implements \Artist\Waiter\Contracts\Hook\Migration
 {
 

@@ -5,11 +5,6 @@ namespace Artist\Waiter;
 use Closure;
 use Illuminate\Support\Fluent;
 
-/**
- * Schema class
- *
- * @author KanekiYuto
- */
 class Schema
 {
 

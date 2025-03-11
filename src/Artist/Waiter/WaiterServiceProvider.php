@@ -4,11 +4,6 @@ namespace Artist\Waiter;
 
 use Illuminate\Support\ServiceProvider;
 
-/**
- * Service provider
- *
- * @author KanekiYuto
- */
 class WaiterServiceProvider extends ServiceProvider
 {
 

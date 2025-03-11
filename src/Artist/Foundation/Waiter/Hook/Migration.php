@@ -5,11 +5,6 @@ namespace Artist\Foundation\Waiter\Hook;
 use Artist\Waiter\Abstracts\Hook\Migration as Hook;
 use Artist\Waiter\Abstracts\Summary;
 
-/**
- * Basic migration hook
- *
- * @author KanekiYuto
- */
 class Migration extends Hook
 {
 
