@@ -28,6 +28,9 @@ jobs:
                 id: vars
                 run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
+            -   name: Use Token Name
+                run: echo "TYPE=GITHUB_TOKEN"
+
             # Preacher 组件同步
             -   name: Push Preacher to Separate Repository
                 run: |
