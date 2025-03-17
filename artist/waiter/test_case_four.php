@@ -1,10 +1,10 @@
 <?php
 
-use Artist\Foundation\Database\Eloquent\Casts\AutoTimezone;
-use Artist\Waiter\Blueprint;
-use Artist\Waiter\Schema;
-use Artist\Waiter\Waiter;
 use Illuminate\Database\Eloquent\Model;
+use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
+use Illustrator\Waiter\Blueprint;
+use Illustrator\Waiter\Schema;
+use Illustrator\Waiter\Waiter;
 
 return Waiter::configure()->withTable(
     'case_four',
@@ -29,7 +29,7 @@ return Waiter::configure()->withTable(
 })->withModel(
     Model::class
 )->withModelDefinition(
-    (new Artist\Waiter\Schema\ModelDefinition())
+    (new Illustrator\Waiter\Schema\ModelDefinition())
         ->timestamps()
         ->incrementing()
 );

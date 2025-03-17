@@ -29,7 +29,7 @@ jobs:
             -   name: Sync Code and Release
                 env:
                     TARGET_REPO: "waplar-core/preacher"
-                    TARGET_DIR: "src/Artist/Preacher"
+                    TARGET_DIR: "src/Illustrator/Preacher"
                     TARGET_BRANCH: ${{ github.ref_name }}
                     TARGET_PAT: ${{ secrets.RELEASE_PAT }}
                 run: |

@@ -1,9 +1,9 @@
 <?php
 
-use Artist\Foundation\Database\Eloquent\Casts\AutoTimezone;
-use Artist\Waiter\Blueprint;
-use Artist\Waiter\Schema;
-use Artist\Waiter\Waiter;
+use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
+use Illustrator\Waiter\Blueprint;
+use Illustrator\Waiter\Schema;
+use Illustrator\Waiter\Waiter;
 
 return Waiter::configure()->withTable(
     'case_two',

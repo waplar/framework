@@ -1,3 +1,0 @@
-## Artist Preacher
-
-Wait to add more content...

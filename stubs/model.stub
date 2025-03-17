@@ -3,8 +3,8 @@
 namespace {{ namespace }};
 
 use Closure;
-use Artist\Waiter\Contracts\Summary;
-use Artist\Waiter\Concerns\HasEvents;
+use Illustrator\Waiter\Contracts\Summary;
+use Illustrator\Waiter\Concerns\HasEvents;
 use Illuminate\Database\Eloquent\Scope;
 
 use {{ summary }} as TheSummary;

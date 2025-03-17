@@ -2,9 +2,9 @@
 
 namespace Tests;
 
-use Artist\WaplarServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Foundation\Application;
+use Illustrator\WaplarServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase

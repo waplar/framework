@@ -1,5 +1,5 @@
 <?php
 
-use Artist\Waiter\Waiter;
+use Illustrator\Waiter\Waiter;
 
 return Waiter::configure();

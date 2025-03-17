@@ -1,5 +1,5 @@
 providers:
-    - Artist\WaplarServiceProvider
+    - Illustrator\WaplarServiceProvider
 
 workbench:
     start: '/waplar'
