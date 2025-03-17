@@ -40,11 +40,7 @@ jobs:
                     # ========== 分支同步逻辑 ==========
                     if [[ $GITHUB_REF == refs/heads/* ]]; then
                       SOURCE_BRANCH=${GITHUB_REF#refs/heads/}
-
-                      # 分割子树提交
                       SPLIT_HASH=$(git subtree split --prefix="$TARGET_DIR" --rejoin)
-
-                      # 推送分支代码
                       git push $REMOTE_NAME "$SPLIT_HASH:refs/heads/$TARGET_BRANCH" --force
                       echo "Branch $SOURCE_BRANCH synced to $TARGET_BRANCH"
                     fi
@@ -55,24 +51,26 @@ jobs:
                       IS_PRERELEASE=false
                       [[ $TAG_NAME =~ -(alpha|beta|rc)\.[0-9]+$ ]] && IS_PRERELEASE=true
 
-                      # 分割子树提交（与分支同步不同的提交点）
+                      # 分割子树提交
                       TAG_SPLIT_HASH=$(git subtree split --prefix="$TARGET_DIR")
-
-                      # 推送标签
                       git push $REMOTE_NAME "$TAG_SPLIT_HASH:refs/tags/$TAG_NAME" --force
 
-                      # ========== 创建 Release ==========
-                      RELEASE_JSON=$(cat <<EOF
-                      {
-                        "tag_name": "$TAG_NAME",
-                        "name": "$TAG_NAME",
-                        "body": "Synced from ${GITHUB_REPOSITORY}",
-                        "prerelease": $IS_PRERELEASE,
-                        "draft": false
-                      }
-                      EOF
+                      # ========== 使用 jq 安全生成 JSON ==========
+                      RELEASE_JSON=$(
+                        jq -n \
+                          --arg tag_name "$TAG_NAME" \
+                          --arg body "Synced from ${GITHUB_REPOSITORY}" \
+                          --argjson prerelease "$IS_PRERELEASE" \
+                          '{
+                            tag_name: $tag_name,
+                            name: $tag_name,
+                            body: $body,
+                            prerelease: $prerelease,
+                            draft: false
+                          }'
                       )
 
+                      # ========== 创建 Release ==========
                       curl -X POST \
                         -H "Authorization: token $TARGET_PAT" \
                         -H "Content-Type: application/json" \
