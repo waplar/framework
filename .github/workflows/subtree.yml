@@ -1,68 +1,80 @@
 name: Subtree Mirror Sync
 
 on:
-  push:
-    branches: [ 'alpha.x' ]
-    tags: [ 'v*' ]
+    push:
+        branches: [ 'alpha.x' ]
+        tags: [ 'v*' ]
 
 jobs:
-  sync:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
+    sync:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
 
-    steps:
-      - name: Checkout with Full History
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
+        steps:
+            -   name: Checkout with Full History
+                uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
+                    ssh-key: ${{ secrets.DEPLOY_KEY }}
 
-      - name: Configure Git Environment
-        run: |
-          git config --global user.name "CI Syncer"
-          git config --global user.email "ci-bot@waplar.org"
-          mkdir -p ~/.ssh
-          echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+            -   name: Configure Git Environment
+                run: |
+                    # 设置全局git配置
+                    git config --global user.name "CI Syncer"
+                    git config --global user.email "ci-bot@waplar.org"
 
-      - name: Dynamic Sync
-        env:
-          TARGET_REPOS: |
-            preacher:src/Artist/Preacher
-        run: |
-          # 获取当前引用类型
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            ref_type="tag"
-            ref_name=${GITHUB_REF#refs/tags/}
-          else
-            ref_type="branch"
-            ref_name=${GITHUB_REF#refs/heads/}
-          fi
+                    # 禁用SSH主机验证
+                    mkdir -p ~/.ssh
+                    echo -e "Host github.com\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null" >> ~/.ssh/config
+                    chmod 600 ~/.ssh/config
 
-          echo "${TARGET_REPOS}" | while IFS=: read repo prefix; do
-            echo "▄■ Syncing $ref_type '$ref_name' to $repo"
+            -   name: Dynamic Subtree Sync
+                env:
+                    TARGET_REPOS: "preacher:src/Artist/Preacher"
+                run: |
+                    # 生成唯一会话ID
+                    SESSION_ID=$(date +%s%N | sha256sum | head -c 8)
 
-            # 配置SSH远程（增加错误处理）
-            remote_name="${repo}-mirror-$(date +%s)"  # 使用唯一远程名
-            git remote remove "$remote_name" 2>/dev/null || true
-            git remote add "$remote_name" "git@github.com:waplar-core/$repo.git"
+                    echo "${TARGET_REPOS}" | while IFS=: read repo prefix; do
+                      # 动态生成唯一远程名称
+                      remote_name="sync-${repo}-${SESSION_ID}"
 
-            # 分割子树提交
-            split_hash=$(git subtree split --prefix="$prefix" --rejoin)
+                      echo "▄■ Processing $repo → Remote: $remote_name"
 
-            # 分支同步逻辑
-            if [[ $ref_type == "branch" ]]; then
-              git push "$remote_name" "$split_hash:refs/heads/$ref_name" --force-with-lease
-            fi
+                      # 强制清理可能存在的旧远程
+                      git remote remove "$remote_name" 2>/dev/null || true
 
-            # 标签同步逻辑
-            if [[ $ref_type == "tag" ]]; then
-              git tag -a "$ref_name" "$split_hash" -m "Synced from main repo" --force
-              git push "$remote_name" "$ref_name" --force
-            fi
+                      # 带调试信息的远程添加
+                      echo "Adding remote: $remote_name => git@github.com:waplar-core/$repo.git"
+                      git remote add "$remote_name" "git@github.com:waplar-core/$repo.git" 2>&1 | sed 's/^/  | REMOTE ADD: /'
 
-            # 清理临时数据
-            git remote remove "$remote_name"
-            git tag -d "$ref_name" 2>/dev/null || true
-          done
+                      # 验证远程配置
+                      echo "Current remotes:"
+                      git remote -v | sed 's/^/  | /'
+
+                      # 分割子树提交（增加提交校验）
+                      split_hash=$(git subtree split --prefix="$prefix" --rejoin --annotate="[SYNC] ")
+                      echo "Split commit: $split_hash"
+                      git show --quiet $split_hash
+
+                      # 引用处理逻辑
+                      if [[ $GITHUB_REF == refs/tags/* ]]; then
+                        ref_type="tag"
+                        ref_name=${GITHUB_REF#refs/tags/}
+
+                        # 标签同步
+                        git tag -f "$ref_name" "$split_hash" -m "Synced from main repository"
+                        git push "$remote_name" "$ref_name" --force 2>&1 | sed 's/^/  | TAG PUSH: /'
+                      else
+                        ref_type="branch"
+                        ref_name=${GITHUB_REF#refs/heads/}
+
+                        # 分支同步
+                        git push "$remote_name" "$split_hash:refs/heads/$ref_name" --force-with-lease 2>&1 | sed 's/^/  | BRANCH PUSH: /'
+                      fi
+
+                      # 事后清理
+                      git remote remove "$remote_name"
+                    done
