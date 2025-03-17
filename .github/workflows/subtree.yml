@@ -10,8 +10,6 @@ jobs:
         permissions:
             contents: write
             id-token: write
-            # 新增Release创建权限
-            releases: write
 
         steps:
             -   name: Checkout Code
