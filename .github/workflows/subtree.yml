@@ -28,12 +28,10 @@ jobs:
                 id: vars
                 run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
-            - name: Echo PAT Token
-              run: echo "PAT_TOKEN=${{ secrets.PAT_TOKEN }}"
-
             # Preacher 组件同步
             -   name: Push Preacher to Separate Repository
                 run: |
+                    # Adding remote only once
                     git remote add preacher "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/preacher.git"
                     git subtree push --prefix=src/Artist/Preacher preacher ${{ env.BRANCH }}
 
@@ -43,6 +41,7 @@ jobs:
                 run: |
                     TAG=${GITHUB_REF#refs/tags/}
 
+                    # Add remote once for each repo
                     git remote add preacher "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/preacher.git"
                     git subtree push --prefix=src/Artist/Preacher preacher $TAG
 
