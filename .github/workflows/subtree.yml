@@ -1,44 +1,78 @@
-name: Sync Multiple Subtrees to Separate Repos
+name: Subtree Mirror Sync
 
 on:
     push:
-        tags:
-            - '*'
-
-permissions:
-    contents: write
-    id-token: write
+        branches: [ 'alpha.x' ]  # 匹配所有分支
+        tags: [ 'v*' ]       # 匹配所有标签
 
 jobs:
-    sync-subtrees:
+    sync:
         runs-on: ubuntu-latest
         permissions:
             contents: write
             id-token: write
+
         steps:
-            -   uses: actions/checkout@v4
+            -   name: Checkout with Full History
+                uses: actions/checkout@v4
                 with:
                     fetch-depth: 0
+                    ssh-key: ${{ secrets.DEPLOY_KEY }}
 
-            -   name: Test PAT
+            -   name: Configure Git Environment
                 run: |
-                    curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
-                    https://api.github.com/repos/waplar-core/preacher | jq .permissions
+                    git config --global user.name "CI Syncer"
+                    git config --global user.email "ci-bot@waplar.org"
+                    mkdir -p ~/.ssh
+                    echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
-            -   name: Configure Git
+            -   name: Dynamic Sync
+                env:
+                    TARGET_REPOS: |
+                        preacher:src/Artist/Preacher
                 run: |
-                    git config user.name "github-actions[bot]"
-                    git config user.email "github-actions[bot]@users.noreply.github.com"
-                    # 一次性配置所有远程仓库
-                    git remote add preacher "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/preacher.git"
-
-            -   name: Push Code
-                run: |
+                    # 获取当前引用类型
                     if [[ $GITHUB_REF == refs/tags/* ]]; then
-                      TAG=${GITHUB_REF#refs/tags/}
-                      git subtree push --prefix=src/Artist/Preacher preacher $TAG
+                      ref_type="tag"
+                      ref_name=${GITHUB_REF#refs/tags/}
                     else
-                      BRANCH=${GITHUB_REF#refs/heads/}
-                      git subtree push --prefix=src/Artist/Preacher preacher $BRANCH
-                      # 添加其他子目录推送
+                      ref_type="branch"
+                      ref_name=${GITHUB_REF#refs/heads/}
                     fi
+
+                    echo "${TARGET_REPOS}" | while IFS=: read repo prefix; do
+                      echo "▄■ Syncing $ref_type '$ref_name' to $repo"
+
+                      # 配置SSH远程
+                      remote_name="${repo}-mirror"
+                      git remote add $remote_name "git@github.com:waplar-core/$repo.git"
+
+                      # 分割子树提交
+                      split_hash=$(git subtree split --prefix="$prefix" --rejoin)
+
+                      # 分支同步逻辑
+                      if [[ $ref_type == "branch" ]]; then
+                        git push $remote_name $split_hash:refs/heads/$ref_name --force-with-lease
+                      fi
+
+                      # 标签同步逻辑（包含附注标签支持）
+                      if [[ $ref_type == "tag" ]]; then
+                        # 获取原始标签信息
+                        tag_message=$(git tag -l --format='%(contents)' $ref_name)
+                        tagger_info=$(git tag -l --format='%(taggeremail)%0a%(taggerdate)' $ref_name)
+
+                        # 在子树提交上创建同名标签
+                        git tag -a "$ref_name" $split_hash -m "$tag_message" \
+                          --cleanup=whitespace \
+                          --force
+
+                        # 推送标签到远程
+                        git push $remote_name $ref_name --force
+                      fi
+
+                      # 清理临时数据
+                      git remote remove $remote_name
+                      if [[ $ref_type == "tag" ]]; then
+                        git tag -d $ref_name || true
+                      fi
+                    done
