@@ -1,49 +1,84 @@
-name: Sync Multiple Subtrees to Separate Repos
+name: Advanced Tag Sync
 
 on:
     push:
-        tags:
-            - '*'
-
-permissions:
-    contents: write
-    id-token: write
+        tags: [ 'v*' ]
 
 jobs:
-    sync-subtrees:
+    sync-tags:
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
 
         steps:
-            -   name: Checkout Repository
+            -   name: Checkout Code
                 uses: actions/checkout@v4
                 with:
                     fetch-depth: 0
+                    ssh-key: ${{ secrets.DEPLOY_KEY }}
 
-            -   name: Setup Git User
+            -   name: Configure Git
                 run: |
-                    git config user.name "github-actions[bot]"
-                    git config user.email "github-actions[bot]@users.noreply.github.com"
+                    git config --global user.name "Release Bot"
+                    git config --global user.email "bot@waplar.org"
+                    mkdir -p ~/.ssh
+                    echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
-            -   name: Define Variables
-                id: vars
-                run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-
-            # Preacher 组件同步
-            -   name: Push Preacher to Separate Repository
+            -   name: Process Tags
+                env:
+                    TARGET_REPO: "waplar-core/preacher"
+                    TARGET_DIR: "src/Artist/Preacher"
                 run: |
-                    # Adding remote only once
-                    git remote add preacher "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/preacher.git"
-                    git subtree push --prefix=src/Artist/Preacher preacher ${{ env.BRANCH }}
+                    # 获取标签信息
+                    TAG_NAME=${GITHUB_REF#refs/tags/}
+                    IS_PRERELEASE=false
 
-            # 可选：Tag 同步（若子包也使用 Tag 版本管理）
-            -   name: Tag Sync
-                if: startsWith(github.ref, 'refs/tags/')
-                run: |
-                    TAG=${GITHUB_REF#refs/tags/}
+                    # 判断预发布状态（匹配 -alpha/-beta/-rc 等后缀）
+                    if [[ $TAG_NAME =~ -(alpha|beta|rc)\.[0-9]+$ ]]; then
+                      IS_PRERELEASE=true
+                      PRERELEASE_TYPE=${BASH_REMATCH[1]}
+                    fi
 
-                    # Add remote once for each repo
-                    git remote add preacher "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/preacher.git"
-                    git subtree push --prefix=src/Artist/Preacher preacher $TAG
+                    # 获取原始标签信息
+                    TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME)
+                    TAGGER_NAME=$(git tag -l --format='%(taggername)' $TAG_NAME)
+                    TAGGER_EMAIL=$(git tag -l --format='%(taggeremail)' $TAG_NAME)
+                    TAGGER_DATE=$(git tag -l --format='%(taggerdate)' $TAG_NAME)
 
-                    git remote add composer "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/composer.git"
-                    git subtree push --prefix=src/Artist/Composer composer $TAG
+                    # 编辑发行说明
+                    NEW_MESSAGE=$(cat <<EOF
+                    Synced from main repository
+
+                    Original Tag Info:
+                    - Name: $TAG_NAME
+                    - Prerelease: $IS_PRERELEASE
+                    - Author: $TAGGER_NAME <$TAGGER_EMAIL>
+                    - Date: $TAGGER_DATE
+
+                    $TAG_MESSAGE
+                    EOF
+                    )
+
+                    # 分割子树
+                    SPLIT_HASH=$(git subtree split --prefix="$TARGET_DIR")
+
+                    # 创建新标签
+                    git tag -a "$TAG_NAME" "$SPLIT_HASH" \
+                      -m "$NEW_MESSAGE" \
+                      --cleanup=whitespace \
+                      --force
+
+                    # 配置目标仓库
+                    REMOTE_NAME="target-repo"
+                    git remote add $REMOTE_NAME "git@github.com:$TARGET_REPO.git"
+
+                    # 推送标签（区分预发布）
+                    if [ "$IS_PRERELEASE" = true ]; then
+                      echo "Pushing prerelease tag ($PRERELEASE_TYPE)"
+                      git push $REMOTE_NAME "$TAG_NAME" --force \
+                        --push-option="prerelease=true"
+                    else
+                      echo "Pushing release tag"
+                      git push $REMOTE_NAME "$TAG_NAME" --force
+                    fi
