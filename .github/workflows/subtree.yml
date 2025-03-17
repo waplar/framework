@@ -20,6 +20,11 @@ jobs:
                 with:
                     fetch-depth: 0
 
+            -   name: Test PAT
+                run: |
+                    curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+                    https://api.github.com/repos/waplar-core/preacher | jq .permissions
+
             -   name: Configure Git
                 run: |
                     git config user.name "github-actions[bot]"
