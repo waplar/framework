@@ -28,6 +28,9 @@ jobs:
                 id: vars
                 run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
+            - name: Echo PAT Token
+              run: echo "PAT_TOKEN=${{ secrets.PAT_TOKEN }}"
+
             # Preacher 组件同步
             -   name: Push Preacher to Separate Repository
                 run: |
