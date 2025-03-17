@@ -1,6 +1,6 @@
 {
     "name": "waplar/framework",
-    "description": "Based on laravel derived development framework.",
+    "description": "Waplar is an extension framework built on Laravel, designed to make development more elegant and effortless through its simple design and efficient features.",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -26,8 +26,11 @@
         "source": "https://github.com/waplar/framework"
     },
     "require": {
-        "php": "^8.2",
-        "laravel/framework": "^11.9"
+        "php": "^8.2 || ^8.3 || ^8.4",
+        "laravel/framework": "^11.0 || ^12.0"
+    },
+    "replace": {
+        "artist/preacher": "self.version"
     },
     "config": {
         "sort-packages": true,

@@ -40,5 +40,5 @@ Waplar Framework 是一个依赖于 laravel 的开发框架，它在 laravel 之
 
 ## 许可证
 
-Waplar Framework 是一款基于[MIT许可证]（LICENSE .md）的开源软件。
+Waplar Framework 是一款基于[MIT许可证](LICENSE.md)的开源软件。
 
