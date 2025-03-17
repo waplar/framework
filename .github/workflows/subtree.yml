@@ -1,11 +1,12 @@
-name: Advanced Tag & Release Sync
+name: Advanced Sync with Branch & Release
 
 on:
     push:
         tags: [ 'v*' ]
+        branches: [ alpha.x ]
 
 jobs:
-    sync-tags:
+    sync:
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -20,77 +21,61 @@ jobs:
 
             -   name: Configure Git
                 run: |
-                    git config --global user.name "Release Bot"
+                    git config --global user.name "Sync Bot"
                     git config --global user.email "bot@waplar.org"
                     mkdir -p ~/.ssh
                     echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
-            -   name: Process Tags and Create Release
+            -   name: Sync Code and Release
                 env:
                     TARGET_REPO: "waplar-core/preacher"
                     TARGET_DIR: "src/Artist/Preacher"
-                    # 添加目标仓库的PAT
+                    TARGET_BRANCH: ${{ github.ref_name }}
                     TARGET_PAT: ${{ secrets.RELEASE_PAT }}
                 run: |
-                    # ========== 标签处理部分 ==========
-                    TAG_NAME=${GITHUB_REF#refs/tags/}
-                    IS_PRERELEASE=false
-
-                    # 判断预发布状态
-                    [[ $TAG_NAME =~ -(alpha|beta|rc)\.[0-9]+$ ]] && {
-                      IS_PRERELEASE=true
-                      PRERELEASE_TYPE=${BASH_REMATCH[1]}
-                    }
-
-                    # 获取原始发行说明
-                    TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME || git log -1 --pretty=%B)
-
-                    # 生成增强版发行说明
-                    NEW_MESSAGE=$(cat <<EOF
-                    ### Synced from main repository
-
-                    ​**Original Release Info**
-                    - Tag: \`$TAG_NAME\`
-                    - Pre-release: $IS_PRERELEASE
-                    - Created by: $TAGGER_NAME
-                    - Date: $TAGGER_DATE
-
-                    ​**Release Notes**
-                    $TAG_MESSAGE
-                    EOF
-                    )
-
-                    # 分割子树提交
-                    SPLIT_HASH=$(git subtree split --prefix="$TARGET_DIR")
-
-                    # ========== 同步到目标仓库 ==========
+                    # ========== 公共配置 ==========
                     REMOTE_NAME="target-repo"
                     git remote add $REMOTE_NAME "git@github.com:$TARGET_REPO.git"
 
-                    # 推送标签
-                    git push $REMOTE_NAME "$SPLIT_HASH:refs/tags/$TAG_NAME" --force
+                    # ========== 分支同步逻辑 ==========
+                    if [[ $GITHUB_REF == refs/heads/* ]]; then
+                      SOURCE_BRANCH=${GITHUB_REF#refs/heads/}
 
-                    # ========== 创建GitHub Release ==========
-                    RELEASE_PAYLOAD=$(cat <<EOF
-                    {
-                      "tag_name": "$TAG_NAME",
-                      "name": "$TAG_NAME",
-                      "body": "$NEW_MESSAGE",
-                      "prerelease": $IS_PRERELEASE,
-                      "draft": false
-                    }
-                    EOF
-                    )
+                      # 分割子树提交
+                      SPLIT_HASH=$(git subtree split --prefix="$TARGET_DIR" --rejoin)
 
-                    # 调用GitHub API创建Release
-                    curl -sS -X POST \
-                      -H "Authorization: token $TARGET_PAT" \
-                      -H "Content-Type: application/json" \
-                      -H "Accept: application/vnd.github.v3+json" \
-                      "https://api.github.com/repos/$TARGET_REPO/releases" \
-                      -d "$RELEASE_PAYLOAD"
+                      # 推送分支代码
+                      git push $REMOTE_NAME "$SPLIT_HASH:refs/heads/$TARGET_BRANCH" --force
+                      echo "Branch $SOURCE_BRANCH synced to $TARGET_BRANCH"
+                    fi
 
-                    # 验证创建结果
-                    echo "=== Release Created ==="
-                    curl -s -H "Authorization: token $TARGET_PAT" \
-                      "https://api.github.com/repos/$TARGET_REPO/releases/tags/$TAG_NAME" | jq .
+                    # ========== 标签同步逻辑 ==========
+                    if [[ $GITHUB_REF == refs/tags/* ]]; then
+                      TAG_NAME=${GITHUB_REF#refs/tags/}
+                      IS_PRERELEASE=false
+                      [[ $TAG_NAME =~ -(alpha|beta|rc)\.[0-9]+$ ]] && IS_PRERELEASE=true
+
+                      # 分割子树提交（与分支同步不同的提交点）
+                      TAG_SPLIT_HASH=$(git subtree split --prefix="$TARGET_DIR")
+
+                      # 推送标签
+                      git push $REMOTE_NAME "$TAG_SPLIT_HASH:refs/tags/$TAG_NAME" --force
+
+                      # ========== 创建 Release ==========
+                      RELEASE_JSON=$(cat <<EOF
+                      {
+                        "tag_name": "$TAG_NAME",
+                        "name": "$TAG_NAME",
+                        "body": "Synced from ${GITHUB_REPOSITORY}",
+                        "prerelease": $IS_PRERELEASE,
+                        "draft": false
+                      }
+                      EOF
+                      )
+
+                      curl -X POST \
+                        -H "Authorization: token $TARGET_PAT" \
+                        -H "Content-Type: application/json" \
+                        "https://api.github.com/repos/$TARGET_REPO/releases" \
+                        -d "$RELEASE_JSON"
+                    fi
