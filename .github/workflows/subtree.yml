@@ -1,84 +1,98 @@
-name: Advanced Tag Sync
+name: Advanced Tag & Release Sync
 
 on:
-  push:
-    tags: [ 'v*' ]
+    push:
+        tags: [ 'v*' ]
 
 jobs:
-  sync-tags:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
+    sync-tags:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
+            # 新增Release创建权限
+            releases: write
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
+        steps:
+            -   name: Checkout Code
+                uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
+                    ssh-key: ${{ secrets.DEPLOY_KEY }}
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "Release Bot"
-          git config --global user.email "bot@waplar.org"
-          mkdir -p ~/.ssh
-          echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+            -   name: Configure Git
+                run: |
+                    git config --global user.name "Release Bot"
+                    git config --global user.email "bot@waplar.org"
+                    mkdir -p ~/.ssh
+                    echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
-      - name: Process Tags
-        env:
-          TARGET_REPO: "waplar-core/preacher"
-          TARGET_DIR: "src/Artist/Preacher"
-        run: |
-          # 获取标签信息
-          TAG_NAME=${GITHUB_REF#refs/tags/}
-          IS_PRERELEASE=false
-          
-          # 判断预发布状态（匹配 -alpha/-beta/-rc 等后缀）
-          if [[ $TAG_NAME =~ -(alpha|beta|rc)\.[0-9]+$ ]]; then
-            IS_PRERELEASE=true
-            PRERELEASE_TYPE=${BASH_REMATCH[1]}
-          fi
+            -   name: Process Tags and Create Release
+                env:
+                    TARGET_REPO: "waplar-core/preacher"
+                    TARGET_DIR: "src/Artist/Preacher"
+                    # 添加目标仓库的PAT
+                    TARGET_PAT: ${{ secrets.RELEASE_PAT }}
+                run: |
+                    # ========== 标签处理部分 ==========
+                    TAG_NAME=${GITHUB_REF#refs/tags/}
+                    IS_PRERELEASE=false
 
-          # 获取原始标签信息
-          TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME)
-          TAGGER_NAME=$(git tag -l --format='%(taggername)' $TAG_NAME)
-          TAGGER_EMAIL=$(git tag -l --format='%(taggeremail)' $TAG_NAME)
-          TAGGER_DATE=$(git tag -l --format='%(taggerdate)' $TAG_NAME)
+                    # 判断预发布状态
+                    [[ $TAG_NAME =~ -(alpha|beta|rc)\.[0-9]+$ ]] && {
+                      IS_PRERELEASE=true
+                      PRERELEASE_TYPE=${BASH_REMATCH[1]}
+                    }
 
-          # 编辑发行说明
-          NEW_MESSAGE=$(cat <<EOF
-          Synced from main repository
-          
-          Original Tag Info:
-          - Name: $TAG_NAME
-          - Prerelease: $IS_PRERELEASE
-          - Author: $TAGGER_NAME <$TAGGER_EMAIL>
-          - Date: $TAGGER_DATE
-          
-          $TAG_MESSAGE
-          EOF
-          )
+                    # 获取原始发行说明
+                    TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME || git log -1 --pretty=%B)
 
-          # 分割子树
-          SPLIT_HASH=$(git subtree split --prefix="$TARGET_DIR")
+                    # 生成增强版发行说明
+                    NEW_MESSAGE=$(cat <<EOF
+                    ### Synced from main repository
 
-          # 创建新标签
-          git tag -a "$TAG_NAME" "$SPLIT_HASH" \
-            -m "$NEW_MESSAGE" \
-            --cleanup=whitespace \
-            --force
+                    ​**Original Release Info**
+                    - Tag: \`$TAG_NAME\`
+                    - Pre-release: $IS_PRERELEASE
+                    - Created by: $TAGGER_NAME
+                    - Date: $TAGGER_DATE
 
-          # 配置目标仓库
-          REMOTE_NAME="target-repo"
-          git remote add $REMOTE_NAME "git@github.com:$TARGET_REPO.git"
+                    ​**Release Notes**
+                    $TAG_MESSAGE
+                    EOF
+                    )
 
-          # 推送标签（区分预发布）
-          if [ "$IS_PRERELEASE" = true ]; then
-            echo "Pushing prerelease tag ($PRERELEASE_TYPE)"
-            git push $REMOTE_NAME "$TAG_NAME" --force \
-              --push-option="prerelease=true"
-          else
-            echo "Pushing release tag"
-            git push $REMOTE_NAME "$TAG_NAME" --force
-          fi
+                    # 分割子树提交
+                    SPLIT_HASH=$(git subtree split --prefix="$TARGET_DIR")
+
+                    # ========== 同步到目标仓库 ==========
+                    REMOTE_NAME="target-repo"
+                    git remote add $REMOTE_NAME "git@github.com:$TARGET_REPO.git"
+
+                    # 推送标签
+                    git push $REMOTE_NAME "$SPLIT_HASH:refs/tags/$TAG_NAME" --force
+
+                    # ========== 创建GitHub Release ==========
+                    RELEASE_PAYLOAD=$(cat <<EOF
+                    {
+                      "tag_name": "$TAG_NAME",
+                      "name": "$TAG_NAME",
+                      "body": "$NEW_MESSAGE",
+                      "prerelease": $IS_PRERELEASE,
+                      "draft": false
+                    }
+                    EOF
+                    )
+
+                    # 调用GitHub API创建Release
+                    curl -sS -X POST \
+                      -H "Authorization: token $TARGET_PAT" \
+                      -H "Content-Type: application/json" \
+                      -H "Accept: application/vnd.github.v3+json" \
+                      "https://api.github.com/repos/$TARGET_REPO/releases" \
+                      -d "$RELEASE_PAYLOAD"
+
+                    # 验证创建结果
+                    echo "=== Release Created ==="
+                    curl -s -H "Authorization: token $TARGET_PAT" \
+                      "https://api.github.com/repos/$TARGET_REPO/releases/tags/$TAG_NAME" | jq .
