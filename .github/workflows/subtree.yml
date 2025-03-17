@@ -1,78 +1,68 @@
 name: Subtree Mirror Sync
 
 on:
-    push:
-        branches: [ 'alpha.x' ]  # 匹配所有分支
-        tags: [ 'v*' ]       # 匹配所有标签
+  push:
+    branches: [ 'alpha.x' ]
+    tags: [ 'v*' ]
 
 jobs:
-    sync:
-        runs-on: ubuntu-latest
-        permissions:
-            contents: write
-            id-token: write
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
 
-        steps:
-            -   name: Checkout with Full History
-                uses: actions/checkout@v4
-                with:
-                    fetch-depth: 0
-                    ssh-key: ${{ secrets.DEPLOY_KEY }}
+    steps:
+      - name: Checkout with Full History
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
 
-            -   name: Configure Git Environment
-                run: |
-                    git config --global user.name "CI Syncer"
-                    git config --global user.email "ci-bot@waplar.org"
-                    mkdir -p ~/.ssh
-                    echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+      - name: Configure Git Environment
+        run: |
+          git config --global user.name "CI Syncer"
+          git config --global user.email "ci-bot@waplar.org"
+          mkdir -p ~/.ssh
+          echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
-            -   name: Dynamic Sync
-                env:
-                    TARGET_REPOS: |
-                        preacher:src/Artist/Preacher
-                run: |
-                    # 获取当前引用类型
-                    if [[ $GITHUB_REF == refs/tags/* ]]; then
-                      ref_type="tag"
-                      ref_name=${GITHUB_REF#refs/tags/}
-                    else
-                      ref_type="branch"
-                      ref_name=${GITHUB_REF#refs/heads/}
-                    fi
+      - name: Dynamic Sync
+        env:
+          TARGET_REPOS: |
+            preacher:src/Artist/Preacher
+        run: |
+          # 获取当前引用类型
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            ref_type="tag"
+            ref_name=${GITHUB_REF#refs/tags/}
+          else
+            ref_type="branch"
+            ref_name=${GITHUB_REF#refs/heads/}
+          fi
 
-                    echo "${TARGET_REPOS}" | while IFS=: read repo prefix; do
-                      echo "▄■ Syncing $ref_type '$ref_name' to $repo"
+          echo "${TARGET_REPOS}" | while IFS=: read repo prefix; do
+            echo "▄■ Syncing $ref_type '$ref_name' to $repo"
 
-                      # 配置SSH远程
-                      remote_name="${repo}-mirror"
-                      git remote add $remote_name "git@github.com:waplar-core/$repo.git"
+            # 配置SSH远程（增加错误处理）
+            remote_name="${repo}-mirror-$(date +%s)"  # 使用唯一远程名
+            git remote remove "$remote_name" 2>/dev/null || true
+            git remote add "$remote_name" "git@github.com:waplar-core/$repo.git"
 
-                      # 分割子树提交
-                      split_hash=$(git subtree split --prefix="$prefix" --rejoin)
+            # 分割子树提交
+            split_hash=$(git subtree split --prefix="$prefix" --rejoin)
 
-                      # 分支同步逻辑
-                      if [[ $ref_type == "branch" ]]; then
-                        git push $remote_name $split_hash:refs/heads/$ref_name --force-with-lease
-                      fi
+            # 分支同步逻辑
+            if [[ $ref_type == "branch" ]]; then
+              git push "$remote_name" "$split_hash:refs/heads/$ref_name" --force-with-lease
+            fi
 
-                      # 标签同步逻辑（包含附注标签支持）
-                      if [[ $ref_type == "tag" ]]; then
-                        # 获取原始标签信息
-                        tag_message=$(git tag -l --format='%(contents)' $ref_name)
-                        tagger_info=$(git tag -l --format='%(taggeremail)%0a%(taggerdate)' $ref_name)
+            # 标签同步逻辑
+            if [[ $ref_type == "tag" ]]; then
+              git tag -a "$ref_name" "$split_hash" -m "Synced from main repo" --force
+              git push "$remote_name" "$ref_name" --force
+            fi
 
-                        # 在子树提交上创建同名标签
-                        git tag -a "$ref_name" $split_hash -m "$tag_message" \
-                          --cleanup=whitespace \
-                          --force
-
-                        # 推送标签到远程
-                        git push $remote_name $ref_name --force
-                      fi
-
-                      # 清理临时数据
-                      git remote remove $remote_name
-                      if [[ $ref_type == "tag" ]]; then
-                        git tag -d $ref_name || true
-                      fi
-                    done
+            # 清理临时数据
+            git remote remove "$remote_name"
+            git tag -d "$ref_name" 2>/dev/null || true
+          done
