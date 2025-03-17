@@ -1,0 +1,43 @@
+name: Sync Multiple Subtrees to Separate Repos
+
+on:
+    push:
+        tags:
+            - '*'
+
+jobs:
+    sync-subtrees:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout Repository
+                uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
+
+            -   name: Setup Git User
+                run: |
+                    git config user.name "github-actions[bot]"
+                    git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            -   name: Define Variables
+                id: vars
+                run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+            # Preacher 组件同步
+            -   name: Push Preacher to Separate Repository
+                run: |
+                    git remote add preacher "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/preacher.git"
+                    git subtree push --prefix=src/Artist/Preacher preacher ${{ env.BRANCH }}
+
+            # 可选：Tag 同步（若子包也使用 Tag 版本管理）
+            -   name: Tag Sync
+                if: startsWith(github.ref, 'refs/tags/')
+                run: |
+                    TAG=${GITHUB_REF#refs/tags/}
+
+                    git remote add preacher "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/preacher.git"
+                    git subtree push --prefix=src/Artist/Preacher preacher $TAG
+
+                    git remote add composer "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/composer.git"
+                    git subtree push --prefix=src/Artist/Composer composer $TAG
