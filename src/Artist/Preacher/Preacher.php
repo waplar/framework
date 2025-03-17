@@ -2,7 +2,6 @@
 
 namespace Artist\Preacher;
 
-use Artist\Support\Facades\Poet;
 use Closure;
 use stdClass;
 
