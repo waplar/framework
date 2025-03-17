@@ -32,7 +32,7 @@ jobs:
             -   name: Push Preacher to Separate Repository
                 run: |
                     # Adding remote only once
-                    git remote add preacher "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/waplar-core/preacher.git"
+                    git remote add preacher "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/waplar-core/preacher.git"
                     git subtree push --prefix=src/Artist/Preacher preacher ${{ env.BRANCH }}
 
             # 可选：Tag 同步（若子包也使用 Tag 版本管理）
