@@ -29,14 +29,14 @@ class Builder
     private array $data = [];
 
     /**
-     * @param Closure $hook
-     * @param string  $msg
-     * @param int     $statusCode
+     * @param  Closure  $hook
+     * @param  string   $msg
+     * @param  int      $statusCode
      */
     public function __construct(
         Closure $hook,
-        string $msg = '',
-        int $statusCode = Constants\CodeStatus::SUCCEED
+        string $msg = Constants\DefaultSetting::MSG,
+        int $statusCode = Constants\DefaultSetting::STATUS_CODE
     ) {
         $this->setHook($hook);
         $this->setMsg($msg);
@@ -44,7 +44,17 @@ class Builder
     }
 
     /**
-     * @param stdClass $value
+     * @param  Closure  $value
+     *
+     * @return void
+     */
+    private function setHook(Closure $value): void
+    {
+        $this->hook = $value;
+    }
+
+    /**
+     * @param  stdClass  $value
      *
      * @return static
      */
@@ -56,7 +66,7 @@ class Builder
     }
 
     /**
-     * @param array $value
+     * @param  array  $value
      *
      * @return static
      */
@@ -68,18 +78,18 @@ class Builder
     }
 
     /**
-     * @param int   $page
-     * @param int   $prePage
-     * @param int   $total
-     * @param array $rows
+     * @param  int    $page
+     * @param  int    $pages
+     * @param  int    $total
+     * @param  array  $rows
      *
      * @return static
      */
-    public function setPaging(int $page, int $prePage, int $total, array $rows): static
+    public function setPaging(int $page, int $pages, int $total, array $rows): static
     {
         $this->data['paging'] = (object) [
             'page' => $page,
-            'prePage' => $prePage,
+            'pages' => $pages,
             'total' => $total,
             'rows' => $rows,
         ];
@@ -107,7 +117,7 @@ class Builder
     }
 
     /**
-     * @param int $statusCode
+     * @param  int  $statusCode
      *
      * @return static
      */
@@ -130,7 +140,7 @@ class Builder
     }
 
     /**
-     * @param string $message
+     * @param  string  $message
      *
      * @return static
      */
@@ -139,6 +149,14 @@ class Builder
         $this->msg = $message;
 
         return $this;
+    }
+
+    /**
+     * @return Closure
+     */
+    private function getHook(): Closure
+    {
+        return $this->hook;
     }
 
     /**
@@ -179,24 +197,6 @@ class Builder
             'total' => 0,
             'rows' => [],
         ];
-    }
-
-    /**
-     * @param Closure $value
-     *
-     * @return void
-     */
-    private function setHook(Closure $value): void
-    {
-        $this->hook = $value;
-    }
-
-    /**
-     * @return Closure
-     */
-    private function getHook(): Closure
-    {
-        return $this->hook;
     }
 
 }
