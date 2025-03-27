@@ -2,7 +2,7 @@
 
 namespace Illustrator\Preacher\Constants;
 
-class CodeStatus
+class StatusCode
 {
 
     /**

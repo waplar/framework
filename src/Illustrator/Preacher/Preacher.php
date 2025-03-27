@@ -14,7 +14,7 @@ class Preacher
     private static Closure $hook;
 
     /**
-     * @param Closure $callable
+     * @param  Closure  $callable
      */
     public static function useHook(Closure $callable): void
     {
@@ -22,53 +22,20 @@ class Preacher
     }
 
     /**
-     * @param string $msg
+     * @param  string  $msg
+     * @param  int     $statusCode
      *
      * @return Builder
      */
-    public static function basic(string $msg): Builder
+    public static function basic(
+        string $msg = Constants\DefaultSetting::MSG,
+        int $statusCode = Constants\DefaultSetting::STATUS_CODE
+    ): Builder
     {
         return new Builder(
             hook: self::getHook(),
-            msg: $msg
-        );
-    }
-
-    /**
-     * @param array $value
-     *
-     * @return Builder
-     */
-    public static function rows(array $value): Builder
-    {
-        return (new Builder(hook: self::getHook()))->setRows($value);
-    }
-
-    /**
-     * @param stdClass $value
-     *
-     * @return Builder
-     */
-    public static function receipt(stdClass $value): Builder
-    {
-        return (new Builder(hook: self::getHook()))->setReceipt($value);
-    }
-
-    /**
-     * @param int   $page
-     * @param int   $prePage
-     * @param int   $total
-     * @param array $rows
-     *
-     * @return Builder
-     */
-    public static function paging(int $page, int $prePage, int $total, array $rows): Builder
-    {
-        return (new Builder(hook: self::getHook()))->setPaging(
-            page: $page,
-            prePage: $prePage,
-            total: $total,
-            rows: $rows
+            msg: $msg,
+            statusCode: $statusCode
         );
     }
 
@@ -80,6 +47,44 @@ class Preacher
         return self::$hook ?? function (string $msg, array $data) {
             return [$msg, $data];
         };
+    }
+
+    /**
+     * @param  array  $value
+     *
+     * @return Builder
+     */
+    public static function rows(array $value): Builder
+    {
+        return (new Builder(hook: self::getHook()))->setRows($value);
+    }
+
+    /**
+     * @param  stdClass  $value
+     *
+     * @return Builder
+     */
+    public static function receipt(stdClass $value): Builder
+    {
+        return (new Builder(hook: self::getHook()))->setReceipt($value);
+    }
+
+    /**
+     * @param  int    $page
+     * @param  int    $pages
+     * @param  int    $total
+     * @param  array  $rows
+     *
+     * @return Builder
+     */
+    public static function paging(int $page, int $pages, int $total, array $rows): Builder
+    {
+        return (new Builder(hook: self::getHook()))->setPaging(
+            page: $page,
+            pages: $pages,
+            total: $total,
+            rows: $rows
+        );
     }
 
 }

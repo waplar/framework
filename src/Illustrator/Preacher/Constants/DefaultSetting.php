@@ -33,4 +33,14 @@ class DefaultSetting
      */
     public const JSON_OPTIONS = JSON_UNESCAPED_UNICODE;
 
+    /**
+     * Default message key's value
+     */
+    public const MSG = '';
+
+    /**
+     * Default status code's value
+     */
+    public const STATUS_CODE = StatusCode::SUCCEED;
+
 }
