@@ -23,7 +23,7 @@ class Poet extends Facade
      *
      * @var string
      */
-    public const FACADE_ACCESSOR = 'artist.poet';
+    public const FACADE_ACCESSOR = 'illustrator.poet';
 
     /**
      * Indicates whether the parsed Facade should be cached
