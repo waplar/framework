@@ -145,7 +145,7 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -161,7 +161,7 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -177,8 +177,8 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string    $column
-     * @param  int|null  $precision
+     * @param string   $column
+     * @param int|null $precision
      *
      * @return ColumnDefinition
      */
