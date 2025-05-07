@@ -10,9 +10,9 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
-     * @param  bool    $autoIncrement
-     * @param  bool    $unsigned
+     * @param string $column
+     * @param bool   $autoIncrement
+     * @param bool   $unsigned
      *
      * @return ColumnDefinition
      */
@@ -28,9 +28,9 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
-     * @param  bool    $autoIncrement
-     * @param  bool    $unsigned
+     * @param string $column
+     * @param bool   $autoIncrement
+     * @param bool   $unsigned
      *
      * @return ColumnDefinition
      */
@@ -46,7 +46,7 @@ trait Column
     /**
      * Create a new tiny text column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -62,7 +62,7 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -78,8 +78,8 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string    $column
-     * @param  int|null  $length
+     * @param string   $column
+     * @param int|null $length
      *
      * @return ColumnDefinition
      */
@@ -95,8 +95,8 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
-     * @param  bool    $autoIncrement
+     * @param string $column
+     * @param bool   $autoIncrement
      *
      * @return ColumnDefinition
      */
@@ -112,8 +112,8 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
-     * @param  int     $length
+     * @param string $column
+     * @param int    $length
      *
      * @return ColumnDefinition
      */
@@ -129,7 +129,7 @@ trait Column
     /**
      * Stay in line with laravel
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */

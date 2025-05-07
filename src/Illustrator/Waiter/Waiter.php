@@ -22,7 +22,7 @@ class Waiter
     /**
      * Construct a Waiter instance
      *
-     * @param  Fluent  $params
+     * @param Fluent $params
      */
     private function __construct(Fluent $params)
     {
@@ -70,9 +70,9 @@ class Waiter
     /**
      * Configuration table information
      *
-     * @param  string  $name
-     * @param  string  $comment
-     * @param  string  $prefix
+     * @param string $name
+     * @param string $comment
+     * @param string $prefix
      *
      * @return static
      */
@@ -94,9 +94,9 @@ class Waiter
     /**
      * Configuration summary information
      *
-     * @param  string|null  $namespace
-     * @param  string|null  $classname
-     * @param  string|null  $comment
+     * @param string|null $namespace
+     * @param string|null $classname
+     * @param string|null $comment
      *
      * @return static
      */
@@ -113,10 +113,10 @@ class Waiter
     /**
      * Configuration model information
      *
-     * @param  string       $extends
-     * @param  string|null  $namespace
-     * @param  string|null  $classname
-     * @param  string|null  $comment
+     * @param string      $extends
+     * @param string|null $namespace
+     * @param string|null $classname
+     * @param string|null $comment
      *
      * @return static
      */
@@ -139,9 +139,9 @@ class Waiter
     /**
      * Configuration migration information
      *
-     * @param  string|null  $filename
-     * @param  string|null  $comment
-     * @param  string       $hook
+     * @param string|null $filename
+     * @param string|null $comment
+     * @param string      $hook
      *
      * @return static
      */
@@ -161,7 +161,7 @@ class Waiter
     /**
      * Configuration model definition information
      *
-     * @param  ModelDefinition  $definition
+     * @param ModelDefinition $definition
      *
      * @return static
      */
@@ -180,7 +180,7 @@ class Waiter
     /**
      * Configuration blueprint information
      *
-     * @param  Closure  $closure
+     * @param Closure $closure
      *
      * @return static
      */
@@ -199,7 +199,7 @@ class Waiter
     /**
      * Generate the namespace and class name from the table name
      *
-     * @param  string  $tableName
+     * @param string $tableName
      *
      * @return array
      */

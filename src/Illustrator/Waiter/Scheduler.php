@@ -31,7 +31,7 @@ class Scheduler
     /**
      * Handle scheduler
      *
-     * @param  array  $params
+     * @param array $params
      *
      * @return mixed
      */
@@ -314,9 +314,9 @@ class Scheduler
     }
 
     /**
-     * @param  array  $params
-     * @param  array  $configure
-     * @param  array  $table
+     * @param array $params
+     * @param array $configure
+     * @param array $table
      *
      * @return array
      */
@@ -339,9 +339,9 @@ class Scheduler
     }
 
     /**
-     * @param  array  $params
-     * @param  array  $configure
-     * @param  array  $table
+     * @param array $params
+     * @param array $configure
+     * @param array $table
      *
      * @return array
      */
@@ -358,9 +358,9 @@ class Scheduler
     }
 
     /**
-     * @param  array  $params
-     * @param  array  $configure
-     * @param  array  $table
+     * @param array $params
+     * @param array $configure
+     * @param array $table
      *
      * @return array
      */
@@ -377,9 +377,9 @@ class Scheduler
     }
 
     /**
-     * @param  string  $suffixClassname
-     * @param  string  $namespace
-     * @param  array   $configure
+     * @param string $suffixClassname
+     * @param string $namespace
+     * @param array  $configure
      *
      * @return string
      */

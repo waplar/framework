@@ -3,12 +3,12 @@
 namespace Illustrator\Waiter\Builders;
 
 use Closure;
-use Nette\PhpGenerator\Literal;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Str;
 use Illustrator\Waiter\Constants\Waiter as WaiterConstants;
 use Illustrator\Waiter\Manager;
 use Illustrator\Waiter\Schema\ColumnDefinition;
+use Nette\PhpGenerator\Literal;
 
 class Model extends Builder
 {
@@ -16,8 +16,8 @@ class Model extends Builder
     /**
      * Handle
      *
-     * @param  array    $params
-     * @param  Closure  $next
+     * @param array   $params
+     * @param Closure $next
      *
      * @return mixed
      */
