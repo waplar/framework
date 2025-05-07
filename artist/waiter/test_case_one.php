@@ -17,13 +17,13 @@ return Waiter::configure()->withTable(
         $blueprint->string('explain', 64)->nullable()->comment('Explain'),
         $blueprint->string('route')->comment('Route name'),
     ], function (ColumnDefinition $definition) {
-        return $definition->summary()->fillable();
+        return $definition->fillable();
     });
 
     $blueprint->group([
         $blueprint->bigInteger('created_at')->comment('Created'),
         $blueprint->bigInteger('updated_at')->comment('Updated'),
     ], function (ColumnDefinition $definition) {
-        return $definition->summary()->cast(AutoTimezone::class)->fillable();
+        return $definition->cast(AutoTimezone::class)->fillable();
     });
 });

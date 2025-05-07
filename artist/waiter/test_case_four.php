@@ -17,7 +17,7 @@ return Waiter::configure()->withTable(
         'uuid',
     ]);
 
-    $blueprint->bigInteger('id', true)->summary()->primary()->unique()->comment('ID');
+    $blueprint->bigInteger('id', true)->primary()->unique()->comment('ID');
 
     $blueprint->ulid();
     $blueprint->uuid();
@@ -26,7 +26,7 @@ return Waiter::configure()->withTable(
         $blueprint->bigInteger('created_at')->comment('Created'),
         $blueprint->bigInteger('updated_at')->comment('Updated'),
     ], function (ColumnDefinition $definition) {
-        return $definition->summary()->cast(AutoTimezone::class)->fillable();
+        return $definition->cast(AutoTimezone::class)->fillable();
     });
 })->withModel(
     Model::class
