@@ -9,6 +9,7 @@ use Illustrator\Blueprint\Command;
 use Illustrator\Support\Facades\Poet;
 use Illustrator\Waiter\Schema\ColumnDefinition;
 use ReflectionException;
+use ReflectionMethod;
 
 class Blueprint
 {
@@ -179,7 +180,7 @@ class Blueprint
     {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
         try {
-            $method = new \ReflectionMethod($trace['class'], $trace['function']);
+            $method = new ReflectionMethod($trace['class'], $trace['function']);
         } catch (ReflectionException $e) {
             Poet::fail($e->getMessage());
 

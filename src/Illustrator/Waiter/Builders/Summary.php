@@ -52,8 +52,6 @@ class Summary extends Builder
                 $fluent[WaiterConstants::BLUEPRINT]['columns']
             )->map(function (array $params) {
                 return $params['definition'];
-            })->filter(function (ColumnDefinition $value) {
-                return $value->has('summary');
             })->each(function (mixed $value) use (&$hidden, &$fillable, &$guarded, &$primaryKey) {
                 $upperName = Str::upper($value->get('name'));
 
@@ -88,12 +86,6 @@ class Summary extends Builder
         // Build parameter code
         $pipes[] = function (array $params, Closure $next) use ($fluent, $current) {
             [$stub, $columns] = $params;
-
-            // 过滤不需要的字段信息
-            // Filter out unnecessary fields
-            $columns = collect($columns)->map(function (array $value) {
-                return $value;
-            })->toArray();
 
             $constantsStub = $this->stubDisk()->get('const.stub');
 
