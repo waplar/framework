@@ -14,7 +14,7 @@ class Preacher
     private static Closure $hook;
 
     /**
-     * @param  Closure  $callable
+     * @param Closure $callable
      */
     public static function useHook(Closure $callable): void
     {
@@ -22,16 +22,15 @@ class Preacher
     }
 
     /**
-     * @param  string  $msg
-     * @param  int     $statusCode
+     * @param string $msg
+     * @param int    $statusCode
      *
      * @return Builder
      */
     public static function basic(
         string $msg = Constants\DefaultSetting::MSG,
         int $statusCode = Constants\DefaultSetting::STATUS_CODE
-    ): Builder
-    {
+    ): Builder {
         return new Builder(
             hook: self::getHook(),
             msg: $msg,
@@ -40,17 +39,7 @@ class Preacher
     }
 
     /**
-     * @return Closure
-     */
-    private static function getHook(): Closure
-    {
-        return self::$hook ?? function (string $msg, array $data) {
-            return [$msg, $data];
-        };
-    }
-
-    /**
-     * @param  array  $value
+     * @param array $value
      *
      * @return Builder
      */
@@ -60,7 +49,7 @@ class Preacher
     }
 
     /**
-     * @param  stdClass  $value
+     * @param stdClass $value
      *
      * @return Builder
      */
@@ -70,10 +59,10 @@ class Preacher
     }
 
     /**
-     * @param  int    $page
-     * @param  int    $pages
-     * @param  int    $total
-     * @param  array  $rows
+     * @param int   $page
+     * @param int   $pages
+     * @param int   $total
+     * @param array $rows
      *
      * @return Builder
      */
@@ -85,6 +74,16 @@ class Preacher
             total: $total,
             rows: $rows
         );
+    }
+
+    /**
+     * @return Closure
+     */
+    private static function getHook(): Closure
+    {
+        return self::$hook ?? function (string $msg, array $data) {
+            return [$msg, $data];
+        };
     }
 
 }

@@ -1,8 +1,8 @@
 <?php
 
+use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
 use Illustrator\Waiter\Blueprint;
 use Illustrator\Waiter\Schema\ColumnDefinition;
-use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
 use Illustrator\Waiter\Waiter;
 
 return Waiter::configure()->withTable(

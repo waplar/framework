@@ -10,7 +10,7 @@ trait Command
     /**
      * Stay in line with laravel
      *
-     * @param  string  $comment
+     * @param string $comment
      *
      * @return Fluent
      */
@@ -25,9 +25,9 @@ trait Command
     /**
      * Stay in line with laravel
      *
-     * @param  array|string  $columns
-     * @param  string|null   $name
-     * @param  string|null   $algorithm
+     * @param array|string $columns
+     * @param string|null  $name
+     * @param string|null  $algorithm
      *
      * @return Fluent
      */

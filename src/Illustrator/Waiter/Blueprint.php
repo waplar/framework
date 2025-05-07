@@ -3,13 +3,13 @@
 namespace Illustrator\Waiter;
 
 use Closure;
-use ReflectionMethod;
-use ReflectionException;
 use Illuminate\Support\Fluent;
 use Illustrator\Blueprint\Column;
 use Illustrator\Blueprint\Command;
 use Illustrator\Support\Facades\Poet;
 use Illustrator\Waiter\Schema\ColumnDefinition;
+use ReflectionException;
+use ReflectionMethod;
 
 class Blueprint
 {
@@ -33,8 +33,8 @@ class Blueprint
     /**
      * Construct a Blueprint instance
      *
-     * @param  string  $table
-     * @param  string  $prefix
+     * @param string $table
+     * @param string $prefix
      */
     public function __construct(
         protected string $table,
@@ -46,8 +46,8 @@ class Blueprint
     /**
      * Column definition as a group
      *
-     * @param  array[]                                                      $columns
-     * @param  Closure(Schema\ColumnDefinition): (Schema\ColumnDefinition)  $callback
+     * @param array[]                                                     $columns
+     * @param Closure(Schema\ColumnDefinition): (Schema\ColumnDefinition) $callback
      *
      * @return void
      */
@@ -73,9 +73,9 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $type
-     * @param  string  $name
-     * @param  array   $parameters
+     * @param string $type
+     * @param string $name
+     * @param array  $parameters
      *
      * @return Schema\ColumnDefinition
      */
@@ -93,7 +93,7 @@ class Blueprint
      * 新增列信息
      * Add column information
      *
-     * @param  array  $attributes
+     * @param array $attributes
      */
     public function addColumns(array $attributes): void
     {
@@ -143,8 +143,8 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $name
-     * @param  array   $parameters
+     * @param string $name
+     * @param array  $parameters
      *
      * @return Fluent
      */
@@ -158,8 +158,8 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param  string  $name
-     * @param  array   $parameters
+     * @param string $name
+     * @param array  $parameters
      *
      * @return Fluent
      */
@@ -172,7 +172,7 @@ class Blueprint
      * 过滤来自调用者的默认值
      * Filtering default values from the caller
      *
-     * @param  array  $args
+     * @param array $args
      *
      * @return array
      */

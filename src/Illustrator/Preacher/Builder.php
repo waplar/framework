@@ -29,9 +29,9 @@ class Builder
     private array $data = [];
 
     /**
-     * @param  Closure  $hook
-     * @param  string   $msg
-     * @param  int      $statusCode
+     * @param Closure $hook
+     * @param string  $msg
+     * @param int     $statusCode
      */
     public function __construct(
         Closure $hook,
@@ -44,17 +44,7 @@ class Builder
     }
 
     /**
-     * @param  Closure  $value
-     *
-     * @return void
-     */
-    private function setHook(Closure $value): void
-    {
-        $this->hook = $value;
-    }
-
-    /**
-     * @param  stdClass  $value
+     * @param stdClass $value
      *
      * @return static
      */
@@ -66,7 +56,7 @@ class Builder
     }
 
     /**
-     * @param  array  $value
+     * @param array $value
      *
      * @return static
      */
@@ -78,10 +68,10 @@ class Builder
     }
 
     /**
-     * @param  int    $page
-     * @param  int    $pages
-     * @param  int    $total
-     * @param  array  $rows
+     * @param int   $page
+     * @param int   $pages
+     * @param int   $total
+     * @param array $rows
      *
      * @return static
      */
@@ -117,7 +107,7 @@ class Builder
     }
 
     /**
-     * @param  int  $statusCode
+     * @param int $statusCode
      *
      * @return static
      */
@@ -140,7 +130,7 @@ class Builder
     }
 
     /**
-     * @param  string  $message
+     * @param string $message
      *
      * @return static
      */
@@ -149,14 +139,6 @@ class Builder
         $this->msg = $message;
 
         return $this;
-    }
-
-    /**
-     * @return Closure
-     */
-    private function getHook(): Closure
-    {
-        return $this->hook;
     }
 
     /**
@@ -197,6 +179,24 @@ class Builder
             'total' => 0,
             'rows' => [],
         ];
+    }
+
+    /**
+     * @param Closure $value
+     *
+     * @return void
+     */
+    private function setHook(Closure $value): void
+    {
+        $this->hook = $value;
+    }
+
+    /**
+     * @return Closure
+     */
+    private function getHook(): Closure
+    {
+        return $this->hook;
     }
 
 }
