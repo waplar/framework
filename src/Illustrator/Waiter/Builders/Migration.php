@@ -3,10 +3,10 @@
 namespace Illustrator\Waiter\Builders;
 
 use Closure;
-use Illustrator\Waiter\Manager;
 use Illuminate\Pipeline\Pipeline;
 use Illustrator\Waiter\Builders\Migration\UpCreate;
 use Illustrator\Waiter\Constants\Waiter as WaiterConstants;
+use Illustrator\Waiter\Manager;
 
 class Migration extends Builder
 {
@@ -14,8 +14,8 @@ class Migration extends Builder
     /**
      * Handle
      *
-     * @param  array    $params
-     * @param  Closure  $next
+     * @param array   $params
+     * @param Closure $next
      *
      * @return mixed
      */

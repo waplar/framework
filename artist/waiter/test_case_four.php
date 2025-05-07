@@ -1,11 +1,11 @@
 <?php
 
-use Illustrator\Waiter\Blueprint;
 use Illuminate\Database\Eloquent\Model;
-use Illustrator\Waiter\Schema\ColumnDefinition;
 use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
-use Illustrator\Waiter\Waiter;
+use Illustrator\Waiter\Blueprint;
+use Illustrator\Waiter\Schema\ColumnDefinition;
 use Illustrator\Waiter\Schema\ModelDefinition;
+use Illustrator\Waiter\Waiter;
 
 return Waiter::configure()->withTable(
     'case_four',

@@ -2,10 +2,10 @@
 
 namespace Illustrator\Waiter\Builders;
 
-use Nette\PhpGenerator\Dumper;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Nette\PhpGenerator\Dumper;
 use PhpCsFixer\Config;
 use PhpCsFixer\FixerFactory;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -17,13 +17,13 @@ class Builder
     /**
      * The array is converted to code text
      *
-     * @param  array  $values
+     * @param array $values
      *
      * @return string
      */
     final protected function arrayToCode(array $values): string
     {
-        return (new Dumper)->dump($values);
+        return (new Dumper())->dump($values);
     }
 
     /**
