@@ -3,6 +3,7 @@
 namespace Illustrator\Waiter;
 
 use Closure;
+use ReflectionMethod;
 use ReflectionException;
 use Illuminate\Support\Fluent;
 use Illustrator\Blueprint\Column;
@@ -179,7 +180,7 @@ class Blueprint
     {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
         try {
-            $method = new \ReflectionMethod($trace['class'], $trace['function']);
+            $method = new ReflectionMethod($trace['class'], $trace['function']);
         } catch (ReflectionException $e) {
             Poet::fail($e->getMessage());
 

@@ -99,6 +99,8 @@ class UpCreate extends Builder
                 return $key . '(' . $methodParameters . ')';
             });
 
+            unset($params['attributes']['column']);
+
             // 处理列属性定义
             // Processing column attribute definitions
             $columnAttributes = collect([
