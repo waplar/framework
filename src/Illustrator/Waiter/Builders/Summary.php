@@ -105,7 +105,7 @@ class Summary extends Builder
                 'metaColumns' => $this->arrayToCode(
                     collect($columns)->map(function (array $columnDefinition) {
                         if (isset($columnDefinition['cast'])) {
-                            $columnDefinition['cast'] = new Literal("$columnDefinition[cast]::class");
+                            $columnDefinition['cast'] = new Literal("\\$columnDefinition[cast]::class");
                         }
 
                         return $columnDefinition;
@@ -142,12 +142,12 @@ class Summary extends Builder
             $stub = $this->format($stub);
             $uuid = $fluent[WaiterConstants::TABLE]['name'];
 
-            app(Manager::class)
-                ->appendSummary($uuid, $fluent[$current]['package'])
-                ->appendStub("$current.$uuid", [
-                    'filepath' => $fluent[$current]['filepath'],
-                    'content' => $stub,
-                ]);
+            app(
+                Manager::class
+            )->appendSummary($uuid, $fluent[$current]['package'])->appendStub("$current.$uuid", [
+                'filepath' => $fluent[$current]['filepath'],
+                'content' => $stub,
+            ]);
 
             return $next($stub);
         };

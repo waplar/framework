@@ -57,7 +57,7 @@ class Waiter
                 ],
             ],
             Constants\Waiter::MIGRATION => [
-                'filepath' => database_path(implode(DIRECTORY_SEPARATOR, ['illustrator', 'waiter'])),
+                'filepath' => database_path(implode(DIRECTORY_SEPARATOR, ['migrations', 'illustrator', 'waiter'])),
                 'suffix' => [
                     'file' => 'php',
                 ],
