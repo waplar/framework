@@ -50,7 +50,9 @@
 			"providers": [
 				"Illustrator\\WaplarServiceProvider"
 			],
-			"aliases": {}
+			"aliases": {
+				"Poet": "Illustrator\\Support\\Facades\\Poet"
+			}
 		}
 	},
 	"scripts": {
