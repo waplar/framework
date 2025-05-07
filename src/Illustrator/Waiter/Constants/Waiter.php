@@ -15,6 +15,6 @@ class Waiter
 
     public const MIGRATION = 'Migration';
 
-    public const SCHEMA = 'Schema';
+    public const BLUEPRINT = 'Blueprint';
 
 }

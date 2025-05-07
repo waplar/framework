@@ -31,7 +31,7 @@ class Scheduler
     /**
      * Handle scheduler
      *
-     * @param array $params
+     * @param  array  $params
      *
      * @return mixed
      */
@@ -172,7 +172,7 @@ class Scheduler
                 [$code, $instance] = $params;
 
                 $required = [
-                    Constants\Waiter::SCHEMA => 'withSchema',
+                    Constants\Waiter::BLUEPRINT => 'withBlueprint',
                     Constants\Waiter::TABLE => 'withTable',
                 ];
 
@@ -202,19 +202,21 @@ class Scheduler
             function (array $params, Closure $next) {
                 [$code, $instance] = $params;
 
-                $withSchema = collect(
-                    $instance->params->get(Constants\Waiter::SCHEMA)
-                )->map(function (string $closure, string $action) use ($instance) {
-                    $closure = unserialize($closure)->getClosure();
+                $closure = unserialize(
+                    $instance->params->get(Constants\Waiter::BLUEPRINT)['closure']
+                )->getClosure();
 
-                    $schema = new Schema($action, $instance->params->get(Constants\Waiter::TABLE)['name']);
+                $blueprint = new Blueprint(
+                    $instance->params->get(Constants\Waiter::TABLE)['name'],
+                    $instance->params->get(Constants\Waiter::TABLE)['prefix']
+                );
 
-                    $closure($schema);
+                $closure($blueprint);
 
-                    return $schema->getParams();
-                });
-
-                $instance->params->set(Constants\Waiter::SCHEMA, $withSchema);
+                $instance->params->set(Constants\Waiter::BLUEPRINT, [
+                    'columns' => $blueprint->getColumns(),
+                    'commands' => $blueprint->getCommands(),
+                ]);
 
                 return $next([$code, $instance]);
             },
@@ -223,6 +225,10 @@ class Scheduler
             // Set the namespace, file path, and class name according to the rule
             function (array $params, Closure $next) {
                 [$code, $instance] = $params;
+
+                if (!($instance instanceof Waiter)) {
+                    return $next([$code, $instance]);
+                }
 
                 collect([
                     Constants\Waiter::SUMMARY,
@@ -237,6 +243,19 @@ class Scheduler
                     $instance->params->set($key, $params);
                 });
 
+                // 初始化迁移参数
+                // Initialize migration parameters
+                if ($instance->params->has(Constants\Waiter::MIGRATION)) {
+                    $instance->params->set(
+                        Constants\Waiter::MIGRATION,
+                        $this->initMigrationParams(
+                            $instance->params->get(Constants\Waiter::MIGRATION),
+                            $instance->params->get(Constants\Waiter::CONFIGURE)[Constants\Waiter::MIGRATION],
+                            $instance->params->get(Constants\Waiter::TABLE),
+                        )
+                    );
+                }
+
                 return $next([$code, $instance]);
             },
 
@@ -249,20 +268,23 @@ class Scheduler
                 $builders = [
                     Builders\Summary::class => Constants\Waiter::SUMMARY,
                     Builders\Model::class => Constants\Waiter::MODEL,
+                    Builders\Migration::class => Constants\Waiter::MIGRATION,
                 ];
 
-                collect($builders)->map(function (string $key, string $builder) use (&$pipes, $instance) {
+                foreach ($builders as $builder => $key) {
                     if ($instance->params->has($key)) {
                         $pipes[] = $builder;
                     }
-                });
+                }
 
-                app(Pipeline::class)
-                    ->send([$instance->params, $builders])
-                    ->through($pipes)
-                    ->then(function ($params) {
-                        return $params;
-                    });
+                app(
+                    Pipeline::class
+                )->send([
+                    $instance->params,
+                    $builders,
+                ])->through($pipes)->then(function ($params) {
+                    return $params;
+                });
 
                 return $next([$code, $instance]);
             },
@@ -270,9 +292,31 @@ class Scheduler
     }
 
     /**
-     * @param array $params
-     * @param array $configure
-     * @param array $table
+     * 初始化迁移参数
+     * Initialize migration parameters.
+     */
+    private function initMigrationParams(array $params, array $configure, array $table): array
+    {
+        $filepath = implode(DIRECTORY_SEPARATOR, [
+            $configure['filepath'],
+            $params['filename'] ?? $table['name'] . '_table',
+        ]);
+
+        unset($params['filename']);
+
+        return array_merge($params, [
+            'comment' => $params['comment'] ?? $table['comment'],
+            'filepath' => implode('.', [
+                $filepath,
+                $configure['suffix']['file'],
+            ]),
+        ]);
+    }
+
+    /**
+     * @param  array  $params
+     * @param  array  $configure
+     * @param  array  $table
      *
      * @return array
      */
@@ -295,9 +339,9 @@ class Scheduler
     }
 
     /**
-     * @param array $params
-     * @param array $configure
-     * @param array $table
+     * @param  array  $params
+     * @param  array  $configure
+     * @param  array  $table
      *
      * @return array
      */
@@ -314,9 +358,9 @@ class Scheduler
     }
 
     /**
-     * @param array $params
-     * @param array $configure
-     * @param array $table
+     * @param  array  $params
+     * @param  array  $configure
+     * @param  array  $table
      *
      * @return array
      */
@@ -333,9 +377,9 @@ class Scheduler
     }
 
     /**
-     * @param string $suffixClassname
-     * @param string $namespace
-     * @param array  $configure
+     * @param  string  $suffixClassname
+     * @param  string  $namespace
+     * @param  array   $configure
      *
      * @return string
      */

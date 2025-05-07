@@ -1,63 +1,69 @@
 {
-    "name": "waplar/framework",
-    "description": "Waplar is an extension framework built on Laravel, designed to make development more elegant and effortless through its simple design and efficient features.",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Illustrator\\": "src/Illustrator"
-        },
-        "files": [
-            "src/Illustrator/Foundation/helpers.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
-    "authors": [
-        {
-            "name": "KanekiYuto",
-            "email": "kaneki.yuto.404@gmail.com"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/waplar/framework/issues",
-        "source": "https://github.com/waplar/framework"
-    },
-    "require": {
-        "php": "^8.2 || ^8.3 || ^8.4",
-        "laravel/framework": "^11.0 || ^12.0"
-    },
-    "replace": {
-        "illustrator/preacher": "self.version"
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "composer/package-versions-deprecated": true,
-            "pestphp/pest-plugin": true
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-alpha.x": "1.0.x-dev"
-        },
-        "laravel": {
-            "providers": [
-                "Illustrator\\WaplarServiceProvider"
-            ],
-            "aliases": {}
-        }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.68",
-        "laravel/pint": "^1.20",
-        "orchestra/testbench": "^9.9",
-        "pestphp/pest": "^3.7",
-        "pestphp/pest-plugin-laravel": "^3.0",
-        "spatie/laravel-ray": "^1.39"
-    }
+	"name": "waplar/framework",
+	"description": "Waplar is an extension framework built on Laravel, designed to make development more elegant and effortless through its simple design and efficient features.",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Illustrator\\": "src/Illustrator"
+		},
+		"files": [
+			"src/Illustrator/Foundation/helpers.php"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\": "tests/"
+		}
+	},
+	"authors": [
+		{
+			"name": "KanekiYuto",
+			"email": "kaneki.yuto.404@gmail.com"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/waplar/framework/issues",
+		"source": "https://github.com/waplar/framework"
+	},
+	"require": {
+		"php": "^8.2 || ^8.3 || ^8.4",
+		"laravel/framework": "^11.0 || ^12.0",
+		"nette/php-generator": "^4.1",
+		"nikic/php-parser": "^5.4",
+		"symfony/var-dumper": "^7.2"
+	},
+	"replace": {
+		"illustrator/preacher": "self.version"
+	},
+	"config": {
+		"sort-packages": true,
+		"allow-plugins": {
+			"composer/package-versions-deprecated": true,
+			"pestphp/pest-plugin": true
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-alpha.x": "1.0.x-dev"
+		},
+		"laravel": {
+			"providers": [
+				"Illustrator\\WaplarServiceProvider"
+			],
+			"aliases": {}
+		}
+	},
+	"scripts": {
+		"test": "pest"
+	},
+	"minimum-stability": "stable",
+	"prefer-stable": true,
+	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^3.68",
+		"laravel/pint": "^1.20",
+		"orchestra/testbench": "^9.9",
+		"pestphp/pest": "^3.7",
+		"pestphp/pest-plugin-laravel": "^3.0",
+		"spatie/laravel-ray": "^1.39"
+	}
 }

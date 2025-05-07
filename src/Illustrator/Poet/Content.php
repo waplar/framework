@@ -10,7 +10,7 @@ trait Content
     /**
      * @var int
      */
-    private int $length = 150;
+    private int $length = 120;
 
     /**
      * @param string $title
