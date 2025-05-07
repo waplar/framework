@@ -94,6 +94,19 @@ class UpCreate extends Builder
                 mixed $value,
                 string $key
             ) {
+                if (in_array($key, [
+                    'autoIncrement',
+                    'change',
+                    'first',
+                    'invisible',
+                    'persisted',
+                    'unsigned',
+                    'useCurrent',
+                    'useCurrentOnUpdate',
+                ])) {
+                    return "$key()";
+                }
+
                 $methodParameters = $this->methodParameter($value);
 
                 return $key . '(' . $methodParameters . ')';

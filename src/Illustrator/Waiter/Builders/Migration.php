@@ -38,7 +38,6 @@ class Migration extends Builder
             return $next($stub);
         };
 
-        // 测试
         $pipes[] = function (string $stub, Closure $next) use ($fluent, $current) {
             $stub = $this->params([
                 'upSchema' => $this->upSchema(
