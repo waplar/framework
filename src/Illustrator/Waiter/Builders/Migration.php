@@ -26,8 +26,6 @@ class Migration extends Builder
         $pipes = [];
         $current = $builders[__CLASS__];
 
-        dump(json_encode($fluent, JSON_UNESCAPED_UNICODE));
-
         // 设置基础的参数
         // Set basic parameters
         $pipes[] = function (string $stub, Closure $next) use ($fluent, $current) {

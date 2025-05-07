@@ -92,9 +92,7 @@ class Summary extends Builder
             // 过滤不需要的字段信息
             // Filter out unnecessary fields
             $columns = collect($columns)->map(function (array $value) {
-                return collect($value)->filter(function (mixed $value, string $key) {
-                    return $key !== 'summary';
-                });
+                return $value;
             })->toArray();
 
             $constantsStub = $this->stubDisk()->get('const.stub');

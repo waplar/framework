@@ -142,4 +142,53 @@ trait Column
         );
     }
 
+    /**
+     * Stay in line with laravel
+     *
+     * @param  string  $column
+     *
+     * @return ColumnDefinition
+     */
+    public function id(string $column = 'id'): ColumnDefinition
+    {
+        return $this->addColumn(
+            __FUNCTION__,
+            $column,
+            $this->filterDefaultsFromCaller(func_get_args())
+        );
+    }
+
+    /**
+     * Stay in line with laravel
+     *
+     * @param  string  $column
+     *
+     * @return ColumnDefinition
+     */
+    public function longText(string $column): ColumnDefinition
+    {
+        return $this->addColumn(
+            __FUNCTION__,
+            $column,
+            $this->filterDefaultsFromCaller(func_get_args())
+        );
+    }
+
+    /**
+     * Stay in line with laravel
+     *
+     * @param  string    $column
+     * @param  int|null  $precision
+     *
+     * @return ColumnDefinition
+     */
+    public function timestamp(string $column, int|null $precision = null): ColumnDefinition
+    {
+        return $this->addColumn(
+            __FUNCTION__,
+            $column,
+            $this->filterDefaultsFromCaller(func_get_args())
+        );
+    }
+
 }

@@ -40,7 +40,6 @@ use Illuminate\Support\Fluent;
  * @method $this fillable(bool $value = true)
  * @method $this guarded(bool $value = true)
  * @method $this hidden(bool $value = true)
- * @method $this summary(bool $value = true)
  */
 class ColumnDefinition extends Fluent
 {
