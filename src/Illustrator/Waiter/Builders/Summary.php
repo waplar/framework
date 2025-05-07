@@ -3,6 +3,7 @@
 namespace Illustrator\Waiter\Builders;
 
 use Closure;
+use Nette\PhpGenerator\Literal;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Str;
 use Illustrator\Waiter\Constants\Waiter as WaiterConstants;
@@ -15,8 +16,8 @@ class Summary extends Builder
     /**
      * Handle
      *
-     * @param array   $params
-     * @param Closure $next
+     * @param  array    $params
+     * @param  Closure  $next
      *
      * @return mixed
      */
@@ -48,10 +49,12 @@ class Summary extends Builder
             $hidden = $fillable = $guarded = [];
 
             $columns = collect(
-                $fluent[WaiterConstants::SCHEMA]['up']['create']['columns']
-            )->filter(function (ColumnDefinition $value) {
+                $fluent[WaiterConstants::BLUEPRINT]['columns']
+            )->map(function (array $params) {
+                return $params['definition'];
+            })->filter(function (ColumnDefinition $value) {
                 return $value->has('summary');
-            })->each(function (ColumnDefinition $value) use (&$hidden, &$fillable, &$guarded, &$primaryKey) {
+            })->each(function (mixed $value) use (&$hidden, &$fillable, &$guarded, &$primaryKey) {
                 $upperName = Str::upper($value->get('name'));
 
                 if ($value->has('hidden')) {
@@ -99,7 +102,15 @@ class Summary extends Builder
             // 填充参数到存根
             // Fill parameters into the stub
             $stub = $this->params([
-                'metaColumns' => $this->arrayConvertedToCode($columns),
+                'metaColumns' => $this->arrayToCode(
+                    collect($columns)->map(function (array $columnDefinition) {
+                        if (isset($columnDefinition['cast'])) {
+                            $columnDefinition['cast'] = new Literal("$columnDefinition[cast]::class");
+                        }
+
+                        return $columnDefinition;
+                    })->toArray()
+                ),
                 'columnConstants' => collect(
                     array_keys($columns)
                 )->filter(function (string $value) {

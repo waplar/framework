@@ -2,6 +2,7 @@
 
 namespace Illustrator\Waiter\Builders;
 
+use Nette\PhpGenerator\Dumper;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,6 +13,18 @@ use SplFileInfo;
 
 class Builder
 {
+
+    /**
+     * The array is converted to code text
+     *
+     * @param  array  $values
+     *
+     * @return string
+     */
+    final protected function arrayToCode(array $values): string
+    {
+        return (new Dumper)->dump($values);
+    }
 
     /**
      * The array is converted to code text

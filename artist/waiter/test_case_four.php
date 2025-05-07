@@ -1,35 +1,35 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
-use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
 use Illustrator\Waiter\Blueprint;
-use Illustrator\Waiter\Schema;
+use Illuminate\Database\Eloquent\Model;
+use Illustrator\Waiter\Schema\ColumnDefinition;
+use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
 use Illustrator\Waiter\Waiter;
+use Illustrator\Waiter\Schema\ModelDefinition;
 
 return Waiter::configure()->withTable(
     'case_four',
     'Test case four'
-)->withSchema(function (Schema $schema) {
+)->withBlueprint(function (Blueprint $blueprint) {
+    $blueprint->comment('test');
+    $blueprint->unique([
+        'id',
+        'uuid',
+    ]);
 
-    $schema->create(function (Blueprint $table) {
-        $table->bigInteger('id')->summary()->primary()->unique()->comment('ID');
+    $blueprint->bigInteger('id', true)->summary()->primary()->unique()->comment('ID');
 
-        $table->group([
-            $table->bigInteger('created_at')->comment('Created'),
-            $table->bigInteger('updated_at')->comment('Updated'),
-        ], function (Schema\ColumnDefinition $definition) {
-            return $definition->summary()->cast(AutoTimezone::class)->fillable();
-        });
+    $blueprint->ulid();
+    $blueprint->uuid();
+
+    $blueprint->group([
+        $blueprint->bigInteger('created_at')->comment('Created'),
+        $blueprint->bigInteger('updated_at')->comment('Updated'),
+    ], function (ColumnDefinition $definition) {
+        return $definition->summary()->cast(AutoTimezone::class)->fillable();
     });
-
-}, function (Schema $schema) {
-
-    $schema->dropIfExists();
-
 })->withModel(
     Model::class
 )->withModelDefinition(
-    (new Illustrator\Waiter\Schema\ModelDefinition())
-        ->timestamps()
-        ->incrementing()
-);
+    (new ModelDefinition())->timestamps()->incrementing()
+)->withMigration();

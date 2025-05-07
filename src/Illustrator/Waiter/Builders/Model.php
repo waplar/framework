@@ -3,6 +3,7 @@
 namespace Illustrator\Waiter\Builders;
 
 use Closure;
+use Nette\PhpGenerator\Literal;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Str;
 use Illustrator\Waiter\Constants\Waiter as WaiterConstants;
@@ -15,8 +16,8 @@ class Model extends Builder
     /**
      * Handle
      *
-     * @param array   $params
-     * @param Closure $next
+     * @param  array    $params
+     * @param  Closure  $next
      *
      * @return mixed
      */
@@ -56,8 +57,10 @@ class Model extends Builder
             $casts = $usePackages = [];
 
             collect(
-                $fluent[WaiterConstants::SCHEMA]['up']['create']['columns'] ?? []
-            )->each(function (ColumnDefinition $value) use (&$casts, &$usePackages) {
+                $fluent[WaiterConstants::BLUEPRINT]['columns'] ?? []
+            )->map(function ($params) {
+                return $params['definition'];
+            })->each(function (ColumnDefinition $value) use (&$casts, &$usePackages) {
                 $cast = $value->get('cast');
 
                 if ($value->has('cast')) {
@@ -70,7 +73,7 @@ class Model extends Builder
                             ->implode('');
 
                         $usePackages[$cast] = "use $cast as $packageAlias;";
-                        $casts[$value->get('name')] = "$packageAlias::class";
+                        $casts[$value->get('name')] = new Literal("$packageAlias::class");
                     }
                     // 默认情况下直接赋值
                     // Direct assignment by default
@@ -81,7 +84,7 @@ class Model extends Builder
             })->toArray();
 
             $stub = $this->params([
-                'casts' => $this->arrayConvertedToCode($casts),
+                'casts' => $this->arrayToCode($casts),
                 'usePackages' => collect($usePackages)->implode("\n"),
             ], $stub);
 

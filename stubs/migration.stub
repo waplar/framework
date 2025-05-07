@@ -2,8 +2,9 @@
 
 use {{ summary }} as TheSummary;
 use {{ hook }} as TheHook;
-use Handyfit\Framework\Summary\Summary;
-use Handyfit\Framework\Hook\Migration as Hook;
+
+use Illustrator\Waiter\Abstracts\Hook\Migration as Hook;
+use Illustrator\Waiter\Abstracts\Summary as Summary;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -28,7 +29,8 @@ return new class extends Migration {
     protected Hook $hook;
 
     /**
-     * Create a Migration instance
+     * 创建迁移实例
+     * Create a Migration instance.
      *
      * @return void
      */
@@ -39,7 +41,7 @@ return new class extends Migration {
     }
 
     /**
-     * Get the migration connection name.
+     * 获取迁移连接名称
      *
      * @return string|null
      */
@@ -49,22 +51,26 @@ return new class extends Migration {
     }
 
     /**
+     * 运行迁移
      * Run the migrations.
      *
      * @return void
      */
     public function up(): void
     {
+        // 执行迁移前的操作
         // Perform the operations before the migration
         $this->hook->upBefore($this->summary);
 
         {{ upSchema }}
 
+        // 迁移后执行操作
         // Perform operations after the migration
         $this->hook->upAfter($this->summary);
     }
 
     /**
+     * 重置迁移
      * Reverse the migrations.
      *
      * @return void

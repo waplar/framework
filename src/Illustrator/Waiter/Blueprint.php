@@ -3,11 +3,17 @@
 namespace Illustrator\Waiter;
 
 use Closure;
+use ReflectionException;
 use Illuminate\Support\Fluent;
+use Illustrator\Blueprint\Column;
+use Illustrator\Blueprint\Command;
+use Illustrator\Support\Facades\Poet;
 use Illustrator\Waiter\Schema\ColumnDefinition;
 
 class Blueprint
 {
+
+    use Column, Command;
 
     /**
      * The columns that should be added to the table.
@@ -26,8 +32,8 @@ class Blueprint
     /**
      * Construct a Blueprint instance
      *
-     * @param string $table
-     * @param string $prefix
+     * @param  string  $table
+     * @param  string  $prefix
      */
     public function __construct(
         protected string $table,
@@ -39,124 +45,58 @@ class Blueprint
     /**
      * Column definition as a group
      *
-     * @param ColumnDefinition[]                                          $columns
-     * @param Closure(Schema\ColumnDefinition): (Schema\ColumnDefinition) $callback
+     * @param  array[]                                                      $columns
+     * @param  Closure(Schema\ColumnDefinition): (Schema\ColumnDefinition)  $callback
      *
      * @return void
      */
     public function group(array $columns, Closure $callback): void
     {
-        $definition = $callback(new ColumnDefinition());
+        collect($columns)->each(function (Schema\ColumnDefinition $column) use ($callback) {
+            $definition = $callback($column);
 
-        if (!($definition instanceof ColumnDefinition)) {
-            return;
-        }
+            if (!($definition instanceof ColumnDefinition)) {
+                return;
+            }
 
-        $columns = collect(
-            $columns
-        )->mapWithKeys(function (Schema\ColumnDefinition $column) use ($definition) {
-            // Merge and return the common parts
+            // 合并公共部分
+            // Merge common parts
             collect($definition->all())->map(function ($value, $key) use ($column) {
                 $column->set($key, $value);
             });
 
-            return [$column['name'] => $column];
-        })->all();
-
-        $this->columns = array_merge($this->columns, $columns);
+            $this->columns[$column['name']]['definition'] = $column;
+        });
     }
 
     /**
      * Stay in line with laravel
      *
-     * @param string $column
-     * @param bool   $autoIncrement
-     * @param bool   $unsigned
-     *
-     * @return Schema\ColumnDefinition
-     */
-    public function integer(
-        string $column,
-        bool $autoIncrement = false,
-        bool $unsigned = false
-    ): Schema\ColumnDefinition {
-        return $this->addColumn(
-            __FUNCTION__,
-            $column,
-            compact('autoIncrement', 'unsigned')
-        );
-    }
-
-    /**
-     * Stay in line with laravel
-     *
-     * @param string $type
-     * @param string $name
-     * @param array  $parameters
+     * @param  string  $type
+     * @param  string  $name
+     * @param  array   $parameters
      *
      * @return Schema\ColumnDefinition
      */
     public function addColumn(string $type, string $name, array $parameters = []): Schema\ColumnDefinition
     {
-        $this->columns[$name] = $column = new Schema\ColumnDefinition(
-            array_merge(compact('type', 'name'), $parameters)
-        );
+        $this->columns[$name] = [
+            'attributes' => array_merge(compact('type'), $parameters),
+            'definition' => $column = new Schema\ColumnDefinition(compact('name')),
+        ];
 
         return $column;
     }
 
     /**
-     * Stay in line with laravel
+     * 新增列信息
+     * Add column information
      *
-     * @param string $column
-     * @param bool   $autoIncrement
-     * @param bool   $unsigned
-     *
-     * @return Schema\ColumnDefinition
+     * @param  array  $attributes
      */
-    public function bigInteger(
-        string $column,
-        bool $autoIncrement = false,
-        bool $unsigned = false
-    ): Schema\ColumnDefinition {
-        return $this->addColumn(__FUNCTION__, $column, compact('autoIncrement', 'unsigned'));
-    }
-
-    /**
-     * Create a new tiny text column on the table.
-     *
-     * @param string $column
-     *
-     * @return Schema\ColumnDefinition
-     */
-    public function tinyText(string $column): Schema\ColumnDefinition
+    public function addColumns(array $attributes): void
     {
-        return $this->addColumn(__FUNCTION__, $column);
-    }
-
-    /**
-     * Stay in line with laravel
-     *
-     * @param string $column
-     *
-     * @return Schema\ColumnDefinition
-     */
-    public function text(string $column): Schema\ColumnDefinition
-    {
-        return $this->addColumn(__FUNCTION__, $column);
-    }
-
-    /**
-     * Stay in line with laravel
-     *
-     * @param string   $column
-     * @param int|null $length
-     *
-     * @return Schema\ColumnDefinition
-     */
-    public function string(string $column, int $length = null): Schema\ColumnDefinition
-    {
-        return $this->addColumn(__FUNCTION__, $column, compact('length'));
+        $this->columns = array_merge($this->columns, $attributes);
     }
 
     /**
@@ -202,20 +142,8 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param string $value
-     *
-     * @return Fluent
-     */
-    public function comment(string $value): Fluent
-    {
-        return $this->addCommand(__FUNCTION__, compact('value'));
-    }
-
-    /**
-     * Stay in line with laravel
-     *
-     * @param string $name
-     * @param array  $parameters
+     * @param  string  $name
+     * @param  array   $parameters
      *
      * @return Fluent
      */
@@ -229,14 +157,56 @@ class Blueprint
     /**
      * Stay in line with laravel
      *
-     * @param string $name
-     * @param array  $parameters
+     * @param  string  $name
+     * @param  array   $parameters
      *
      * @return Fluent
      */
     protected function createCommand(string $name, array $parameters = []): Fluent
     {
         return new Fluent(array_merge(compact('name'), $parameters));
+    }
+
+    /**
+     * 过滤来自调用者的默认值
+     * Filtering default values from the caller
+     *
+     * @param  array  $args
+     *
+     * @return array
+     */
+    protected function filterDefaultsFromCaller(array $args): array
+    {
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
+        try {
+            $method = new \ReflectionMethod($trace['class'], $trace['function']);
+        } catch (ReflectionException $e) {
+            Poet::fail($e->getMessage());
+
+            return [];
+        }
+
+        $params = $method->getParameters();
+
+        $filtered = [];
+
+        foreach ($params as $index => $param) {
+            // 跳过第一个参数（比如 $column）
+            if (!array_key_exists($index, $args)) {
+                continue;
+            }
+
+            $name = $param->getName();
+
+            if (
+                !$param->isDefaultValueAvailable() ||
+                $param->getDefaultValue() !== $args[$index]
+            ) {
+                $filtered[$name] = $args[$index];
+            }
+        }
+
+        return $filtered;
     }
 
 }
