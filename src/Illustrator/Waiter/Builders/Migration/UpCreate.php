@@ -103,6 +103,7 @@ class UpCreate extends Builder
                     'unsigned',
                     'useCurrent',
                     'useCurrentOnUpdate',
+                    'nullable',
                 ])) {
                     return "$key()";
                 }
@@ -170,6 +171,7 @@ class UpCreate extends Builder
         return match (gettype($value)) {
             'string' => "'$value'",
             'boolean' => $value ? 'true' : 'false',
+            'integer' => $value,
             'array' => $this->arrayToCode($value),
             default => gettype($value),
         };
