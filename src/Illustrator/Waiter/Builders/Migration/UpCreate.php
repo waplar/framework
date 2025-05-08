@@ -8,18 +8,30 @@ use Illuminate\Support\Str;
 use Illustrator\Waiter\Builders\Builder;
 use Nette\PhpGenerator\Literal;
 
+/**
+ * @todo 需要完善默认参数过滤，补齐注释
+ */
 class UpCreate extends Builder
 {
 
     /**
+     * 列参数信息
+     *
+     * @var Collection
      */
     private Collection $params;
 
     /**
+     * 表名称
+     *
+     * @var string
      */
     private string $table;
 
     /**
+     * 存根信息
+     *
+     * @var string
      */
     private string $stub;
 
@@ -27,8 +39,8 @@ class UpCreate extends Builder
      * Schema::create 生成器实例
      * Schema::create generator instance
      *
-     * @param array  $params
-     * @param string $table
+     * @param  array   $params
+     * @param  string  $table
      */
     public function __construct(array $params, string $table)
     {
@@ -42,6 +54,11 @@ class UpCreate extends Builder
         $this->commands();
     }
 
+    /**
+     * 获取存根信息
+     *
+     * @return string
+     */
     public function getStub(): string
     {
         return $this->stub;
@@ -141,8 +158,8 @@ class UpCreate extends Builder
      * 方法参数生成 (命名参数)
      * Method parameter generation (named parameters)
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param  string  $key
+     * @param  mixed   $value
      *
      * @return string
      */
@@ -158,7 +175,7 @@ class UpCreate extends Builder
      * 方法参数生成
      * Method parameter generation
      *
-     * @param mixed $value
+     * @param  mixed  $value
      *
      * @return string
      */
@@ -181,7 +198,7 @@ class UpCreate extends Builder
      * 列常量引用
      * Column constant reference
      *
-     * @param string $column
+     * @param  string  $column
      *
      * @return string
      */

@@ -191,4 +191,20 @@ trait Column
         );
     }
 
+    /**
+     * Stay in line with laravel
+     *
+     * @param string $column
+     *
+     * @return ColumnDefinition
+     */
+    public function boolean(string $column): ColumnDefinition
+    {
+        return $this->addColumn(
+            __FUNCTION__,
+            $column,
+            $this->filterDefaultsFromCaller(func_get_args())
+        );
+    }
+
 }
