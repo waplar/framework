@@ -6,6 +6,10 @@ use Illuminate\Support\Str;
 
 trait Inform
 {
+    public function ln(): void
+    {
+        $this->output->writeln('');
+    }
 
     /**
      * @param string $message

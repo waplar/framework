@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void   warn(string $message, array $emphasize = [], bool $tag = true)
  * @method static void   fail(string $message, array $emphasize = [], bool $tag = true)
  * @method static void   succeed(string $message, array $emphasize = [], bool $tag = true)
+ * @method static void   ln()
  * @method static string text(string $content, array $styles = [])
  * @method static string color(string $type)
  */

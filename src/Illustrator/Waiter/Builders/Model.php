@@ -118,8 +118,6 @@ class Model extends Builder
                 'useClass' => $useClass->implode(', '),
             ], $stub);
 
-            dump(collect($usePackages)->implode("\n"));
-
             return $next($stub);
         };
 
