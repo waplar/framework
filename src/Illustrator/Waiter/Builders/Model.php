@@ -16,8 +16,8 @@ class Model extends Builder
     /**
      * Handle
      *
-     * @param  array    $params
-     * @param  Closure  $next
+     * @param array   $params
+     * @param Closure $next
      *
      * @return mixed
      */
