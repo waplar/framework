@@ -113,11 +113,11 @@ class Waiter
     /**
      * Configuration model information
      *
-     * @param  string       $extends
-     * @param  string|null  $namespace
-     * @param  string|null  $classname
-     * @param  string|null  $comment
-     * @param  array        $use
+     * @param string      $extends
+     * @param string|null $namespace
+     * @param string|null $classname
+     * @param string|null $comment
+     * @param array       $use
      *
      * @return static
      */
