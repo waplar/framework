@@ -5,6 +5,7 @@ namespace Illustrator\Waiter\Builders;
 use Closure;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Str;
+use Illustrator\Waiter\Concerns\HasEvents;
 use Illustrator\Waiter\Constants\Waiter as WaiterConstants;
 use Illustrator\Waiter\Manager;
 use Illustrator\Waiter\Schema\ColumnDefinition;
@@ -78,12 +79,7 @@ class Model extends Builder
                     // 检查是否需要引入其他类
                     // Check whether additional classes need to be introduced
                     if (class_exists($cast)) {
-                        $packageAlias = Str::of($cast)->explode("\\");
-                        $packageAlias = $packageAlias
-                            ->only(1, $packageAlias->count() - 1, $packageAlias->count())
-                            ->implode('');
-
-                        $usePackages[$cast] = "use $cast as $packageAlias;";
+                        $packageAlias = $this->usePackages($cast, $usePackages);
                         $casts[$value->get('name')] = new Literal("$packageAlias::class");
                     }
                     // 默认情况下直接赋值
@@ -96,8 +92,33 @@ class Model extends Builder
 
             $stub = $this->params([
                 'casts' => $this->arrayToCode($casts),
-                'usePackages' => collect($usePackages)->implode("\n"),
             ], $stub);
+
+            return $next([$stub, $usePackages]);
+        };
+
+        // 注册需要导入的包信息
+        // Register the package information that needs to be imported
+        $pipes[] = function (array $params, Closure $next) use ($fluent, $current) {
+            [$stub, $usePackages] = $params;
+
+            $useClass = collect();
+
+            // 导入默认的包信息
+            // Import default package information
+            collect([
+                HasEvents::class,
+                ...($fluent[$current]['use'] ?? []),
+            ])->each(function ($class) use (&$usePackages, &$useClass) {
+                $useClass->push($this->usePackages($class, $usePackages));
+            });
+
+            $stub = $this->params([
+                'usePackages' => collect($usePackages)->implode("\n"),
+                'useClass' => $useClass->implode(', '),
+            ], $stub);
+
+            dump(collect($usePackages)->implode("\n"));
 
             return $next($stub);
         };
@@ -126,6 +147,22 @@ class Model extends Builder
             });
 
         return $next($params);
+    }
+
+    /**
+     */
+    protected function usePackages(string $class, array &$usePackages): string
+    {
+        $packageAlias = Str::of($class)->explode("\\");
+        $packageAlias = $packageAlias->only(
+            1,
+            $packageAlias->count() - 1,
+            $packageAlias->count()
+        )->implode('');
+
+        $usePackages[$class] = "use $class as $packageAlias;";
+
+        return $packageAlias;
     }
 
 }

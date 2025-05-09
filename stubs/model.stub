@@ -4,7 +4,6 @@ namespace {{ namespace }};
 
 use Closure;
 use Illustrator\Waiter\Contracts\Summary;
-use Illustrator\Waiter\Concerns\HasEvents;
 use Illuminate\Database\Eloquent\Scope;
 
 use {{ summary }} as TheSummary;
@@ -18,7 +17,7 @@ use {{ extends }} as Model;
 class {{ classname }} extends Model
 {
 
-    use HasEvents;
+    use {{ useClass }};
 
     /**
      * The model's default scopes.

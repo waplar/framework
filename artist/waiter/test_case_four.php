@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
 use Illustrator\Waiter\Blueprint;
 use Illustrator\Waiter\Schema\ColumnDefinition;
@@ -29,7 +30,8 @@ return Waiter::configure()->withTable(
         return $definition->cast(AutoTimezone::class)->fillable();
     });
 })->withModel(
-    Model::class
+    Model::class,
+    use: [HasUuids::class]
 )->withModelDefinition(
     (new ModelDefinition())->timestamps()->incrementing()
 )->withMigration();
