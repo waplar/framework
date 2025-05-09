@@ -130,6 +130,10 @@ class Scheduler
 
                 $files[] = Str::replace('\\', '/', $stub['filepath']) . ':0';
 
+                $filepath = $filepath->map(function (string $path){
+                    return str_replace(['\\', '//'], '/', $path);
+                });
+
                 if (!Storage::build([
                     'driver' => 'local',
                     'root' => $filepath->implode(DIRECTORY_SEPARATOR),
