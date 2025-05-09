@@ -16,8 +16,8 @@ class Model extends Builder
     /**
      * Handle
      *
-     * @param array   $params
-     * @param Closure $next
+     * @param  array    $params
+     * @param  Closure  $next
      *
      * @return mixed
      */
@@ -45,9 +45,20 @@ class Model extends Builder
         // 设置额外的定义信息
         // Set additional definition information
         $pipes[] = function (string $stub, Closure $next) use ($fluent, $current) {
+            $attributes = collect();
+
+            foreach (['timestamps', 'incrementing', 'keyType', 'dateFormat'] as $key) {
+                if (isset($fluent[$current]['definition'][$key])) {
+                    $attributes->push(
+                        $this->params([
+                            'value' => $fluent[$current]['definition'][$key],
+                        ], $this->stubDisk('model')->get("$key.stub"))
+                    );
+                }
+            }
+
             $stub = $this->params([
-                'timestamps' => $fluent[$current]['definition']['timestamps'] ?? true,
-                'incrementing' => $fluent[$current]['definition']['incrementing'] ?? true,
+                'attributes' => $attributes->implode("\n"),
             ], $stub);
 
             return $next($stub);
