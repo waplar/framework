@@ -38,7 +38,7 @@ class WaiterServiceProvider extends ServiceProvider
             'test_case_three',
             'test_case_four',
         ])->mapWithKeys(function (string $filename) {
-            $key = dirname(__DIR__, 3) . "/artist/waiter/$filename.php";
+            $key = dirname(__DIR__, 3) . "/illustrator/waiter/$filename.php";
             $value = waiter_path("$filename.php");
 
             return [$key => $value];

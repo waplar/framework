@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
+use Illustrator\Waiter\Blueprint;
+use Illustrator\Waiter\Schema\ColumnDefinition;
+use Illustrator\Waiter\Schema\ModelDefinition;
+use Illustrator\Waiter\Waiter;
+
+return Waiter::configure()->withTable(
+    'basic_use_cases',
+    '基础用例'
+)->withBlueprint(function (Blueprint $blueprint) {
+    $blueprint->comment('基础用例');
+    $blueprint->unique([
+        'id',
+        'ulid',
+    ]);
+
+    $blueprint->bigInteger('id', true)->primary()->unique()->comment('ID');
+    $blueprint->ulid('ulid')->comment('ULID');
+
+    $blueprint->group([
+        $blueprint->bigInteger('created_at')->comment('Created'),
+        $blueprint->bigInteger('updated_at')->comment('Updated'),
+    ], function (ColumnDefinition $definition) {
+        return $definition->cast(AutoTimezone::class)->fillable();
+    });
+})->withModel(
+    Model::class,
+    use: [HasUuids::class]
+)->withModelDefinition(
+    (new ModelDefinition())->timestamps()->incrementing()
+)->withMigration();
