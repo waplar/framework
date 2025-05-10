@@ -15,6 +15,7 @@ class Builder
 {
 
     /**
+     * 数组转换为代码文本
      * The array is converted to code text
      *
      * @param array $values
@@ -27,43 +28,12 @@ class Builder
     }
 
     /**
-     * The array is converted to code text
-     */
-    final protected function arrayConvertedToCode(array $values): string
-    {
-        // 使用 var_export 获取数组的PHP代码形式
-        // Use var_export to get the PHP code representation of the array
-        $exported = var_export($values, true);
-
-        // 转换为短数组语法
-        // Convert to short array syntax
-        $exported = preg_replace('/array \(/', '[', $exported);
-        $exported = preg_replace('/\)(,?)/m', ']$1', $exported);
-
-        // 保持 ::class 不被误识别为字符串
-        // Ensure that ::class is not mistakenly recognized as a string
-        $exported = preg_replace_callback('/\'([^\'\\\\]+::class)\'/', function ($matches) {
-            // 返回去掉引号的类常量
-            // Return the class constant without quotes
-            return $matches[1];
-        }, $exported);
-
-        // 如果生成的代码长度小于等于 36 字符，直接返回
-        // If the generated code is 36 characters or fewer, return it directly
-        if (mb_strlen($exported) <= 36) {
-            return $exported;
-        }
-
-        // 否则移除空格并进行格式调整
-        // Otherwise, remove spaces and adjust formatting
-        return Str::of($exported)
-            ->replace(' ', '')
-            ->replace("'=>\n[\n", "'=>[\n")
-            ->toString();
-    }
-
-    /**
+     * 存根文件磁盘
      * Stub file disk
+     *
+     * @param string|null $path
+     *
+     * @return Filesystem
      */
     final protected function stubDisk(?string $path = null): Filesystem
     {
@@ -78,6 +48,15 @@ class Builder
         ]);
     }
 
+    /**
+     * 批量设置参数
+     * Set parameters in batches
+     *
+     * @param array  $params
+     * @param string $stub
+     *
+     * @return string
+     */
     final protected function params(array $params, string $stub): string
     {
         foreach ($params as $param => $value) {
@@ -88,7 +67,14 @@ class Builder
     }
 
     /**
-     * Fill parameter value
+     * 设置参数值
+     * Set parameter value
+     *
+     * @param string      $param
+     * @param string|bool $value
+     * @param string      $stub
+     *
+     * @return string
      */
     final protected function param(string $param, string|bool $value, string $stub): string
     {
@@ -101,7 +87,12 @@ class Builder
     }
 
     /**
+     * 将代码格式化为可读的
      * Format the code to be readable
+     *
+     * @param string $content
+     *
+     * @return string
      */
     final protected function format(string $content): string
     {
@@ -139,6 +130,29 @@ class Builder
         unlink($file);
 
         return $formattedCode;
+    }
+
+    /**
+     * 导入包信息
+     * Import package information
+     *
+     * @param string $class
+     * @param array  $usePackages
+     *
+     * @return string
+     */
+    protected function usePackages(string $class, array &$usePackages): string
+    {
+        $packageAlias = Str::of($class)->explode("\\");
+        $packageAlias = $packageAlias->only(
+            1,
+            $packageAlias->count() - 1,
+            $packageAlias->count()
+        )->implode('');
+
+        $usePackages[$class] = "use $class as $packageAlias;";
+
+        return $packageAlias;
     }
 
 }

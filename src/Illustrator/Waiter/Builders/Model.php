@@ -4,7 +4,6 @@ namespace Illustrator\Waiter\Builders;
 
 use Closure;
 use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Str;
 use Illustrator\Waiter\Concerns\HasEvents;
 use Illustrator\Waiter\Constants\Waiter as WaiterConstants;
 use Illustrator\Waiter\Manager;
@@ -91,7 +90,10 @@ class Model extends Builder
             })->toArray();
 
             $stub = $this->params([
-                'casts' => $this->arrayToCode($casts),
+                'casts' => $this->arrayToCode([
+                    ...$casts,
+                    ...($fluent[$current]['casts'] ?? []),
+                ]),
             ], $stub);
 
             return $next([$stub, $usePackages]);
@@ -145,22 +147,6 @@ class Model extends Builder
             });
 
         return $next($params);
-    }
-
-    /**
-     */
-    protected function usePackages(string $class, array &$usePackages): string
-    {
-        $packageAlias = Str::of($class)->explode("\\");
-        $packageAlias = $packageAlias->only(
-            1,
-            $packageAlias->count() - 1,
-            $packageAlias->count()
-        )->implode('');
-
-        $usePackages[$class] = "use $class as $packageAlias;";
-
-        return $packageAlias;
     }
 
 }

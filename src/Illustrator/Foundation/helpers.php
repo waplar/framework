@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('artist_path')) {
+if (!function_exists('illustrator_path')) {
     /**
      * Illustrator 目录地址
      * The artist's dir path
@@ -9,9 +9,9 @@ if (!function_exists('artist_path')) {
      *
      * @return string
      */
-    function artist_path(string $path = ''): string
+    function illustrator_path(string $path = ''): string
     {
-        return base_path('artist' . ($path ? '/' . $path : ''));
+        return base_path('illustrator' . ($path ? '/' . $path : ''));
     }
 }
 
@@ -26,6 +26,6 @@ if (!function_exists('waiter_path')) {
      */
     function waiter_path(string $path = ''): string
     {
-        return artist_path('waiter' . ($path ? '/' . $path : ''));
+        return illustrator_path('waiter' . ($path ? '/' . $path : ''));
     }
 }

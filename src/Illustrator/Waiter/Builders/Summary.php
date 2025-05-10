@@ -89,13 +89,16 @@ class Summary extends Builder
 
             $constantsStub = $this->stubDisk()->get('const.stub');
 
+            $usePackages = [];
+
             // 填充参数到存根
             // Fill parameters into the stub
             $stub = $this->params([
                 'metaColumns' => $this->arrayToCode(
-                    collect($columns)->map(function (array $columnDefinition) {
+                    collect($columns)->map(function (array $columnDefinition) use (&$usePackages) {
                         if (isset($columnDefinition['cast'])) {
-                            $columnDefinition['cast'] = new Literal("\\$columnDefinition[cast]::class");
+                            $packageAlias = $this->usePackages($columnDefinition['cast'], $usePackages);
+                            $columnDefinition['cast'] = new Literal("$packageAlias::class");
                         }
 
                         return $columnDefinition;
@@ -121,6 +124,10 @@ class Summary extends Builder
                         '@var' => 'string',
                     ], $constantsStub);
                 })->implode("\n"),
+            ], $stub);
+
+            $stub = $this->params([
+                'usePackages' => collect($usePackages)->implode("\n"),
             ], $stub);
 
             return $next($stub);

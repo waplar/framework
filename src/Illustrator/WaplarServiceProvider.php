@@ -39,6 +39,7 @@ class WaplarServiceProvider extends ServiceProvider
     {
         $this->publishes([
             dirname(__DIR__, 2) . '/config/waplar.php' => config_path('waplar.php'),
+            dirname(__DIR__, 2) . '/illustrator/waiter/basic_use_cases.php' => waiter_path("basic_use_cases.php"),
         ], ['waplar', 'waplar-config']);
     }
 
