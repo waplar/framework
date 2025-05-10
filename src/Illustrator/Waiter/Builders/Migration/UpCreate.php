@@ -8,9 +8,6 @@ use Illuminate\Support\Str;
 use Illustrator\Waiter\Builders\Builder;
 use Nette\PhpGenerator\Literal;
 
-/**
- * @todo 需要完善默认参数过滤，补齐注释
- */
 class UpCreate extends Builder
 {
 
@@ -64,6 +61,10 @@ class UpCreate extends Builder
         return $this->stub;
     }
 
+    /**
+     * 生成迁移表命令信息
+     * Generate migration table command information
+     */
     private function commands(): void
     {
         $commands = collect(
@@ -98,6 +99,10 @@ class UpCreate extends Builder
         $this->stub = $this->param('commands', $commands, $this->stub);
     }
 
+    /**
+     * 生成迁移表列信息
+     * Generate migration table column information
+     */
     private function columns(): void
     {
         $columns = collect(
@@ -107,27 +112,11 @@ class UpCreate extends Builder
             // Processing column parameter definition
             $definition = collect(
                 $params['definition']
-            )->except(['name', 'summary', 'fillable', 'cast'])->map(function (
+            )->except(['name', 'fillable', 'cast'])->map(function (
                 mixed $value,
                 string $key
             ) {
-                if (in_array($key, [
-                    'autoIncrement',
-                    'change',
-                    'first',
-                    'invisible',
-                    'persisted',
-                    'unsigned',
-                    'useCurrent',
-                    'useCurrentOnUpdate',
-                    'nullable',
-                ])) {
-                    return "$key()";
-                }
-
-                $methodParameters = $this->methodParameter($value);
-
-                return $key . '(' . $methodParameters . ')';
+                return $this->removeRedundantArgs($value, $key);
             });
 
             unset($params['attributes']['column']);
@@ -210,6 +199,44 @@ class UpCreate extends Builder
             '$this->summary',
             $column,
         ]);
+    }
+
+    /**
+     * 移除冗余的实际参数
+     * Remove redundant actual parameters
+     *
+     * @param mixed  $value
+     * @param string $key
+     *
+     * @return string
+     */
+    private function removeRedundantArgs(mixed $value, string $key): string
+    {
+        if (in_array($key, [
+            'autoIncrement',
+            'change',
+            'first',
+            'invisible',
+            'persisted',
+            'unsigned',
+            'useCurrent',
+            'useCurrentOnUpdate',
+        ])) {
+            return "$key()";
+        }
+
+        $parameters = [
+            'nullable' => true,
+            'primary' => true,
+        ];
+
+        if (isset($parameters[$key]) && $parameters[$key] === $value) {
+            return "$key()";
+        }
+
+        $methodParameters = $this->methodParameter($value);
+
+        return $key . '(' . $methodParameters . ')';
     }
 
 }

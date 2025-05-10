@@ -113,11 +113,12 @@ class Waiter
     /**
      * Configuration model information
      *
-     * @param  string       $extends
-     * @param  string|null  $namespace
-     * @param  string|null  $classname
-     * @param  string|null  $comment
-     * @param  array        $use
+     * @param string      $extends
+     * @param string|null $namespace
+     * @param string|null $classname
+     * @param string|null $comment
+     * @param array       $use
+     * @param array       $casts
      *
      * @return static
      */
@@ -126,12 +127,13 @@ class Waiter
         string $namespace = null,
         string $classname = null,
         string $comment = null,
-        array $use = []
+        array $use = [],
+        array $casts = []
     ): static {
         $params = $this->params->collect(Constants\Waiter::MODEL) ?? [];
 
         $this->params->set(Constants\Waiter::MODEL, [
-            ...compact('extends', 'namespace', 'classname', 'comment', 'use'),
+            ...compact('extends', 'namespace', 'classname', 'comment', 'use', 'casts'),
             ...$params,
         ]);
 

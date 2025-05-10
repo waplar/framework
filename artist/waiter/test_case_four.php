@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illustrator\Foundation\Database\Eloquent\Casts\AutoTimezone;
 use Illustrator\Waiter\Blueprint;
 use Illustrator\Waiter\Schema\ColumnDefinition;
