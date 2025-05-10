@@ -16,8 +16,8 @@ class Summary extends Builder
     /**
      * Handle
      *
-     * @param array   $params
-     * @param Closure $next
+     * @param  array    $params
+     * @param  Closure  $next
      *
      * @return mixed
      */
@@ -97,8 +97,12 @@ class Summary extends Builder
                 'metaColumns' => $this->arrayToCode(
                     collect($columns)->map(function (array $columnDefinition) use (&$usePackages) {
                         if (isset($columnDefinition['cast'])) {
-                            $packageAlias = $this->usePackages($columnDefinition['cast'], $usePackages);
-                            $columnDefinition['cast'] = new Literal("$packageAlias::class");
+                            // 检查是否需要引入其他类
+                            // Check whether additional classes need to be introduced
+                            if (class_exists($columnDefinition['cast'])) {
+                                $packageAlias = $this->usePackages($columnDefinition['cast'], $usePackages);
+                                $columnDefinition['cast'] = new Literal("$packageAlias::class");
+                            }
                         }
 
                         return $columnDefinition;
