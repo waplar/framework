@@ -44,20 +44,21 @@ class Blueprint
     }
 
     /**
+     * 批量设置列定义
      * Column definition as a group
      *
      * @param array[]                                                     $columns
      * @param Closure(Schema\ColumnDefinition): (Schema\ColumnDefinition) $callback
      *
-     * @return void
+     * @return array
      */
-    public function group(array $columns, Closure $callback): void
+    public function group(array $columns, Closure $callback): array
     {
-        collect($columns)->each(function (Schema\ColumnDefinition $column) use ($callback) {
+        return collect($columns)->map(function (Schema\ColumnDefinition $column) use ($callback) {
             $definition = $callback($column);
 
             if (!($definition instanceof ColumnDefinition)) {
-                return;
+                return $column;
             }
 
             // 合并公共部分
@@ -67,7 +68,9 @@ class Blueprint
             });
 
             $this->columns[$column['name']]['definition'] = $column;
-        });
+
+            return $column;
+        })->toArray();
     }
 
     /**
@@ -87,17 +90,6 @@ class Blueprint
         ];
 
         return $column;
-    }
-
-    /**
-     * 新增列信息
-     * Add column information
-     *
-     * @param array $attributes
-     */
-    public function addColumns(array $attributes): void
-    {
-        $this->columns = array_merge($this->columns, $attributes);
     }
 
     /**
