@@ -3,13 +3,13 @@
 namespace Illustrator\Waiter;
 
 use Closure;
-use Illuminate\Support\Fluent;
-use Illustrator\Blueprint\Column;
-use Illustrator\Blueprint\Command;
-use Illustrator\Support\Facades\Poet;
-use Illustrator\Waiter\Schema\ColumnDefinition;
-use ReflectionException;
 use ReflectionMethod;
+use ReflectionException;
+use Illuminate\Support\Fluent;
+use Illustrator\Support\Facades\Poet;
+use Illustrator\Waiter\Blueprint\Column;
+use Illustrator\Waiter\Blueprint\Command;
+use Illustrator\Waiter\Schema\ColumnDefinition;
 
 class Blueprint
 {

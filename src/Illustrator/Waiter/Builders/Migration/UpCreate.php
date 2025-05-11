@@ -36,8 +36,8 @@ class UpCreate extends Builder
      * Schema::create 生成器实例
      * Schema::create generator instance
      *
-     * @param array  $params
-     * @param string $table
+     * @param  array   $params
+     * @param  string  $table
      */
     public function __construct(array $params, string $table)
     {
@@ -108,11 +108,15 @@ class UpCreate extends Builder
         $columns = collect(
             $this->params->get('columns')
         )->map(function (array $params) {
+            $params['order'] = $params['order'] ?? 0;
+
+            return $params;
+        })->sortBy('order')->values()->map(function (array $params) {
             // 处理列参数定义
             // Processing column parameter definition
             $definition = collect(
                 $params['definition']
-            )->except(['name', 'fillable', 'cast'])->map(function (
+            )->except(['name', 'fillable', 'cast', 'hidden', 'order'])->map(function (
                 mixed $value,
                 string $key
             ) {
@@ -147,8 +151,8 @@ class UpCreate extends Builder
      * 方法参数生成 (命名参数)
      * Method parameter generation (named parameters)
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param  string  $key
+     * @param  mixed   $value
      *
      * @return string
      */
@@ -164,7 +168,7 @@ class UpCreate extends Builder
      * 方法参数生成
      * Method parameter generation
      *
-     * @param mixed $value
+     * @param  mixed  $value
      *
      * @return string
      */
@@ -187,7 +191,7 @@ class UpCreate extends Builder
      * 列常量引用
      * Column constant reference
      *
-     * @param string $column
+     * @param  string  $column
      *
      * @return string
      */
@@ -205,8 +209,8 @@ class UpCreate extends Builder
      * 移除冗余的实际参数
      * Remove redundant actual parameters
      *
-     * @param mixed  $value
-     * @param string $key
+     * @param  mixed   $value
+     * @param  string  $key
      *
      * @return string
      */

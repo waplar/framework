@@ -40,6 +40,7 @@ use Illuminate\Support\Fluent;
  * @method $this fillable(bool $value = true)
  * @method $this guarded(bool $value = true)
  * @method $this hidden(bool $value = true)
+ * @method $this order(int $value = 0)
  */
 class ColumnDefinition extends Fluent
 {

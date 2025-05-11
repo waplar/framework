@@ -1,6 +1,6 @@
 <?php
 
-namespace Illustrator\Blueprint;
+namespace Illustrator\Waiter\Blueprint;
 
 use Illuminate\Support\Fluent;
 
