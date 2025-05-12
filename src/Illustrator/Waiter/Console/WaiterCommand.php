@@ -186,10 +186,10 @@ class WaiterCommand extends Command
      */
     protected function getFiles(): array
     {
-        return Storage::build([
+        return collect(Storage::build([
             'driver' => 'local',
             'root' => $this->directory,
-        ])->files();
+        ])->allFiles())->filter(fn($file) => str_ends_with($file, '.php'))->values()->toArray();
     }
 
 }
