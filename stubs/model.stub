@@ -92,6 +92,8 @@ class {{ classname }} extends Model
      */
     protected static function booted(): void
     {
+        parent::booted();
+
         // 设置查询全局作用域
         // Set the global scope of the query
         foreach (static::$scopes as $key => $scope) {

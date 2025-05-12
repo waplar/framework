@@ -30,7 +30,8 @@
 		"laravel/framework": "^11.0 || ^12.0",
 		"nette/php-generator": "^4.1",
 		"nikic/php-parser": "^5.4",
-		"symfony/var-dumper": "^7.2"
+		"symfony/var-dumper": "^7.2",
+		"friendsofphp/php-cs-fixer": "^3.68"
 	},
 	"replace": {
 		"illustrator/preacher": "self.version"
@@ -44,7 +45,7 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-alpha.x": "1.0.x-dev"
+			"1.x-dev": "1.0.x-dev"
 		},
 		"laravel": {
 			"providers": [
@@ -61,7 +62,6 @@
 	"minimum-stability": "stable",
 	"prefer-stable": true,
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^3.68",
 		"laravel/pint": "^1.20",
 		"orchestra/testbench": "^9.9",
 		"pestphp/pest": "^3.7",
