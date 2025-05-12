@@ -189,7 +189,7 @@ class WaiterCommand extends Command
         return collect(Storage::build([
             'driver' => 'local',
             'root' => $this->directory,
-        ])->allFiles())->filter(fn($file) => str_ends_with($file, '.php'))->values()->toArray();
+        ])->allFiles())->filter(fn ($file) => str_ends_with($file, '.php'))->values()->toArray();
     }
 
 }
