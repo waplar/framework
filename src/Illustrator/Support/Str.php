@@ -9,8 +9,8 @@ class Str
      * 生成列别名 SQL
      * Generate column aliases SQL
      *
-     * @param  string  $source
-     * @param  string  $target
+     * @param string $source
+     * @param string $target
      *
      * @return string
      */
@@ -23,7 +23,7 @@ class Str
      * 生成多个 ORM with 关联加载
      * Generate multiple ORMs with associated loading
      *
-     * @param  array  $relations
+     * @param array $relations
      *
      * @return array
      */
@@ -33,6 +33,5 @@ class Str
             return $name . (!empty($columns) ? ':' . implode(',', $columns) : '');
         })->values()->toArray();
     }
-
 
 }
