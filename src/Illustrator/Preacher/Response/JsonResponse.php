@@ -12,7 +12,7 @@ class JsonResponse extends Response
      * 构建一个 Json 响应实例
      * Construct a Json response instance
      *
-     * @param  Builder  $builder
+     * @param Builder $builder
      */
     public function __construct(Builder $builder)
     {
