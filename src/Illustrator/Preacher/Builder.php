@@ -29,9 +29,24 @@ class Builder
     private array $data = [];
 
     /**
-     * @param Closure $hook
-     * @param string  $msg
-     * @param int     $statusCode
+     * @var int
+     */
+    private int $httpStatus = Constants\DefaultSetting::HTTP_STATUS;
+
+    /**
+     * @var array
+     */
+    private array $headers = [];
+
+    /**
+     * @var array
+     */
+    private array $jsonResponse;
+
+    /**
+     * @param  Closure  $hook
+     * @param  string   $msg
+     * @param  int      $statusCode
      */
     public function __construct(
         Closure $hook,
@@ -41,10 +56,72 @@ class Builder
         $this->setHook($hook);
         $this->setMsg($msg);
         $this->setStatusCode($statusCode);
+        $this->setJsonResponse();
     }
 
     /**
-     * @param stdClass $value
+     * @param  int   $options
+     * @param  bool  $json
+     *
+     * @return static
+     */
+    public function setJsonResponse(int $options = Constants\DefaultSetting::JSON_OPTIONS, bool $json = false): static
+    {
+        $this->jsonResponse = compact(['options', 'json']);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getJsonResponse(): array
+    {
+        return $this->jsonResponse;
+    }
+
+    /**
+     * @param  int  $value
+     *
+     * @return static
+     */
+    public function setHttpStatus(int $value): static
+    {
+        $this->httpStatus = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param  array  $value
+     *
+     * @return static
+     */
+    public function setHeaders(array $value): static
+    {
+        $this->headers = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHttpStatus(): int
+    {
+        return $this->httpStatus;
+    }
+
+    /**
+     * @param  stdClass  $value
      *
      * @return static
      */
@@ -56,7 +133,7 @@ class Builder
     }
 
     /**
-     * @param array $value
+     * @param  array  $value
      *
      * @return static
      */
@@ -68,10 +145,10 @@ class Builder
     }
 
     /**
-     * @param int   $page
-     * @param int   $pages
-     * @param int   $total
-     * @param array $rows
+     * @param  int    $page
+     * @param  int    $pages
+     * @param  int    $total
+     * @param  array  $rows
      *
      * @return static
      */
@@ -107,7 +184,7 @@ class Builder
     }
 
     /**
-     * @param int $statusCode
+     * @param  int  $statusCode
      *
      * @return static
      */
@@ -130,7 +207,7 @@ class Builder
     }
 
     /**
-     * @param string $message
+     * @param  string  $message
      *
      * @return static
      */
@@ -182,7 +259,7 @@ class Builder
     }
 
     /**
-     * @param Closure $value
+     * @param  Closure  $value
      *
      * @return void
      */
