@@ -4,6 +4,7 @@ namespace Illustrator\Preacher;
 
 use Closure;
 use stdClass;
+use Illustrator\Preacher\Constants\DefaultSetting;
 
 class Builder
 {
@@ -44,9 +45,9 @@ class Builder
     private array $jsonResponse;
 
     /**
-     * @param Closure $hook
-     * @param string  $msg
-     * @param int     $statusCode
+     * @param  Closure  $hook
+     * @param  string   $msg
+     * @param  int      $statusCode
      */
     public function __construct(
         Closure $hook,
@@ -60,8 +61,19 @@ class Builder
     }
 
     /**
-     * @param int  $options
-     * @param bool $json
+     * @return array
+     */
+    public function getResponse(): array
+    {
+        return array_merge([
+            DefaultSetting::KEY_STATUS_CODE => $this->getStatusCode(),
+            DefaultSetting::KEY_MESSAGE => $this->getMsg(),
+        ], $this->getData());
+    }
+
+    /**
+     * @param  int   $options
+     * @param  bool  $json
      *
      * @return static
      */
@@ -81,7 +93,7 @@ class Builder
     }
 
     /**
-     * @param int $value
+     * @param  int  $value
      *
      * @return static
      */
@@ -93,7 +105,7 @@ class Builder
     }
 
     /**
-     * @param array $value
+     * @param  array  $value
      *
      * @return static
      */
@@ -121,40 +133,40 @@ class Builder
     }
 
     /**
-     * @param stdClass $value
+     * @param  stdClass  $value
      *
      * @return static
      */
     public function setReceipt(stdClass $value): static
     {
-        $this->data['receipt'] = $value;
+        $this->data[DefaultSetting::KEY_RECEIPT] = $value;
 
         return $this;
     }
 
     /**
-     * @param array $value
+     * @param  array  $value
      *
      * @return static
      */
     public function setRows(array $value): static
     {
-        $this->data['rows'] = $value;
+        $this->data[DefaultSetting::KEY_ROWS] = $value;
 
         return $this;
     }
 
     /**
-     * @param int   $page
-     * @param int   $pages
-     * @param int   $total
-     * @param array $rows
+     * @param  int    $page
+     * @param  int    $pages
+     * @param  int    $total
+     * @param  array  $rows
      *
      * @return static
      */
     public function setPaging(int $page, int $pages, int $total, array $rows): static
     {
-        $this->data['paging'] = (object) [
+        $this->data[DefaultSetting::KEY_PAGING] = (object) [
             'page' => $page,
             'pages' => $pages,
             'total' => $total,
@@ -184,7 +196,7 @@ class Builder
     }
 
     /**
-     * @param int $statusCode
+     * @param  int  $statusCode
      *
      * @return static
      */
@@ -203,11 +215,11 @@ class Builder
         return $this->getHook()(
             $this->msg,
             $this->data
-        )[0] ?? $this->msg;
+        )[DefaultSetting::KEY_MESSAGE] ?? $this->msg;
     }
 
     /**
-     * @param string $message
+     * @param  string  $message
      *
      * @return static
      */
@@ -226,7 +238,7 @@ class Builder
         return $this->getHook()(
             $this->msg,
             $this->data
-        )[1] ?? $this->data;
+        )[DefaultSetting::KEY_DATA] ?? $this->data;
     }
 
     /**
@@ -259,7 +271,7 @@ class Builder
     }
 
     /**
-     * @param Closure $value
+     * @param  Closure  $value
      *
      * @return void
      */
