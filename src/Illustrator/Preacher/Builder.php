@@ -4,6 +4,7 @@ namespace Illustrator\Preacher;
 
 use Closure;
 use stdClass;
+use Illustrator\Preacher\Constants\DefaultSetting;
 
 class Builder
 {
@@ -57,6 +58,17 @@ class Builder
         $this->setMsg($msg);
         $this->setStatusCode($statusCode);
         $this->setJsonResponse();
+    }
+
+    /**
+     * @return array
+     */
+    public function getResponse(): array
+    {
+        return array_merge([
+            DefaultSetting::KEY_STATUS_CODE => $this->getStatusCode(),
+            DefaultSetting::KEY_MESSAGE => $this->getMsg(),
+        ], $this->getData());
     }
 
     /**
@@ -127,7 +139,7 @@ class Builder
      */
     public function setReceipt(stdClass $value): static
     {
-        $this->data['receipt'] = $value;
+        $this->data[DefaultSetting::KEY_RECEIPT] = $value;
 
         return $this;
     }
@@ -139,7 +151,7 @@ class Builder
      */
     public function setRows(array $value): static
     {
-        $this->data['rows'] = $value;
+        $this->data[DefaultSetting::KEY_ROWS] = $value;
 
         return $this;
     }
@@ -154,7 +166,7 @@ class Builder
      */
     public function setPaging(int $page, int $pages, int $total, array $rows): static
     {
-        $this->data['paging'] = (object) [
+        $this->data[DefaultSetting::KEY_PAGING] = (object) [
             'page' => $page,
             'pages' => $pages,
             'total' => $total,
@@ -203,7 +215,7 @@ class Builder
         return $this->getHook()(
             $this->msg,
             $this->data
-        )[0] ?? $this->msg;
+        )[DefaultSetting::KEY_MESSAGE] ?? $this->msg;
     }
 
     /**
@@ -226,7 +238,7 @@ class Builder
         return $this->getHook()(
             $this->msg,
             $this->data
-        )[1] ?? $this->data;
+        )[DefaultSetting::KEY_DATA] ?? $this->data;
     }
 
     /**

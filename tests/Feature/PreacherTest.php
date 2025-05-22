@@ -1,6 +1,7 @@
 <?php
 
 use Illustrator\Preacher\Preacher;
+use Illustrator\Preacher\Constants\DefaultSetting;
 
 beforeEach(function () {
     Illustrator\Preacher\Preacher::useHook(function (string $msg, array $data) {
@@ -10,7 +11,10 @@ beforeEach(function () {
             })->toArray();
         }
 
-        return ["pest-$msg", $data];
+        return [
+            DefaultSetting::KEY_MESSAGE => "pest-$msg",
+            DefaultSetting::KEY_DATA => $data
+        ];
     });
 });
 

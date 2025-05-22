@@ -2,7 +2,7 @@
 
 namespace Illustrator\Support;
 
-class Str
+class Str extends \Illuminate\Support\Str
 {
 
     /**
