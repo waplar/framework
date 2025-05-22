@@ -17,7 +17,7 @@ class JsonResponse extends Response
     public function __construct(Builder $builder)
     {
         parent::__construct(
-            $builder->getData(),
+            $builder->getResponse(),
             $builder->getHttpStatus(),
             $builder->getHeaders(),
             $builder->getJsonResponse()['options'],
