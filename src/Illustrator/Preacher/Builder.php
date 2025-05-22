@@ -3,6 +3,7 @@
 namespace Illustrator\Preacher;
 
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illustrator\Preacher\Constants\DefaultSetting;
 use stdClass;
 
@@ -45,9 +46,9 @@ class Builder
     private array $jsonResponse;
 
     /**
-     * @param Closure $hook
-     * @param string  $msg
-     * @param int     $statusCode
+     * @param  Closure  $hook
+     * @param  string   $msg
+     * @param  int      $statusCode
      */
     public function __construct(
         Closure $hook,
@@ -72,8 +73,8 @@ class Builder
     }
 
     /**
-     * @param int  $options
-     * @param bool $json
+     * @param  int   $options
+     * @param  bool  $json
      *
      * @return static
      */
@@ -93,7 +94,7 @@ class Builder
     }
 
     /**
-     * @param int $value
+     * @param  int  $value
      *
      * @return static
      */
@@ -105,7 +106,7 @@ class Builder
     }
 
     /**
-     * @param array $value
+     * @param  array  $value
      *
      * @return static
      */
@@ -133,7 +134,7 @@ class Builder
     }
 
     /**
-     * @param stdClass $value
+     * @param  stdClass  $value
      *
      * @return static
      */
@@ -145,7 +146,7 @@ class Builder
     }
 
     /**
-     * @param array $value
+     * @param  array  $value
      *
      * @return static
      */
@@ -157,10 +158,10 @@ class Builder
     }
 
     /**
-     * @param int   $page
-     * @param int   $pages
-     * @param int   $total
-     * @param array $rows
+     * @param  int    $page
+     * @param  int    $pages
+     * @param  int    $total
+     * @param  array  $rows
      *
      * @return static
      */
@@ -196,7 +197,7 @@ class Builder
     }
 
     /**
-     * @param int $statusCode
+     * @param  int  $statusCode
      *
      * @return static
      */
@@ -219,7 +220,7 @@ class Builder
     }
 
     /**
-     * @param string $message
+     * @param  string  $message
      *
      * @return static
      */
@@ -271,7 +272,7 @@ class Builder
     }
 
     /**
-     * @param Closure $value
+     * @param  Closure  $value
      *
      * @return void
      */
@@ -286,6 +287,16 @@ class Builder
     private function getHook(): Closure
     {
         return $this->hook;
+    }
+
+    /**
+     * @param  Model  $model
+     *
+     * @return stdClass
+     */
+    public function modelToObject(Model $model): stdClass
+    {
+        return (object) $model->toArray();
     }
 
 }
