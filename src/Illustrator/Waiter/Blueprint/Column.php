@@ -2,8 +2,8 @@
 
 namespace Illustrator\Waiter\Blueprint;
 
-use Illustrator\Waiter\Schema\ColumnDefinition;
 use Illuminate\Database\Schema\ForeignIdColumnDefinition;
+use Illustrator\Waiter\Schema\ColumnDefinition;
 
 trait Column
 {
@@ -11,9 +11,9 @@ trait Column
     /**
      * Create a new integer (4-byte) column on the table.
      *
-     * @param  string  $column
-     * @param  bool    $autoIncrement
-     * @param  bool    $unsigned
+     * @param string $column
+     * @param bool   $autoIncrement
+     * @param bool   $unsigned
      *
      * @return ColumnDefinition
      */
@@ -29,9 +29,9 @@ trait Column
     /**
      * Create a new big integer (8-byte) column on the table.
      *
-     * @param  string  $column
-     * @param  bool    $autoIncrement
-     * @param  bool    $unsigned
+     * @param string $column
+     * @param bool   $autoIncrement
+     * @param bool   $unsigned
      *
      * @return ColumnDefinition
      */
@@ -47,7 +47,7 @@ trait Column
     /**
      * Create a new tiny text column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -63,7 +63,7 @@ trait Column
     /**
      * Create a new text column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -79,8 +79,8 @@ trait Column
     /**
      * Create a new string column on the table.
      *
-     * @param  string    $column
-     * @param  int|null  $length
+     * @param string   $column
+     * @param int|null $length
      *
      * @return ColumnDefinition
      */
@@ -96,8 +96,8 @@ trait Column
     /**
      * Create a new unsigned big integer (8-byte) column on the table.
      *
-     * @param  string  $column
-     * @param  bool    $autoIncrement
+     * @param string $column
+     * @param bool   $autoIncrement
      *
      * @return ColumnDefinition
      */
@@ -113,8 +113,8 @@ trait Column
     /**
      * Create a new ULID column on the table.
      *
-     * @param  string  $column
-     * @param  int     $length
+     * @param string $column
+     * @param int    $length
      *
      * @return ColumnDefinition
      */
@@ -130,7 +130,7 @@ trait Column
     /**
      * Create a new UUID column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -146,7 +146,7 @@ trait Column
     /**
      * Create a new auto-incrementing big integer (8-byte) column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -162,7 +162,7 @@ trait Column
     /**
      * Create a new long text column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -178,8 +178,8 @@ trait Column
     /**
      * Create a new timestamp column on the table.
      *
-     * @param  string    $column
-     * @param  int|null  $precision
+     * @param string   $column
+     * @param int|null $precision
      *
      * @return ColumnDefinition
      */
@@ -195,7 +195,7 @@ trait Column
     /**
      * Create a new boolean column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -211,8 +211,8 @@ trait Column
     /**
      * Create a new date-time column on the table.
      *
-     * @param  string    $column
-     * @param  int|null  $precision
+     * @param string   $column
+     * @param int|null $precision
      *
      * @return ColumnDefinition
      */
@@ -228,7 +228,7 @@ trait Column
     /**
      * Create a new IP address column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -244,7 +244,7 @@ trait Column
     /**
      * Create a new auto-incrementing big integer (8-byte) column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -260,9 +260,9 @@ trait Column
     /**
      * Create a new binary column on the table.
      *
-     * @param  string    $column
-     * @param  int|null  $length
-     * @param  bool      $fixed
+     * @param string   $column
+     * @param int|null $length
+     * @param bool     $fixed
      *
      * @return ColumnDefinition
      */
@@ -278,8 +278,8 @@ trait Column
     /**
      * Create a new char column on the table.
      *
-     * @param  string    $column
-     * @param  int|null  $length
+     * @param string   $column
+     * @param int|null $length
      *
      * @return ColumnDefinition
      */
@@ -295,8 +295,8 @@ trait Column
     /**
      * Create a new date-time column (with time zone) on the table.
      *
-     * @param  string    $column
-     * @param  int|null  $precision
+     * @param string   $column
+     * @param int|null $precision
      *
      * @return ColumnDefinition
      */
@@ -312,7 +312,7 @@ trait Column
     /**
      * Create a new date column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -328,9 +328,9 @@ trait Column
     /**
      * Create a new decimal column on the table.
      *
-     * @param  string  $column
-     * @param  int     $total
-     * @param  int     $places
+     * @param string $column
+     * @param int    $total
+     * @param int    $places
      *
      * @return ColumnDefinition
      */
@@ -346,7 +346,7 @@ trait Column
     /**
      * Create a new double column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -362,8 +362,8 @@ trait Column
     /**
      * Create a new enum column on the table.
      *
-     * @param  string  $column
-     * @param  array   $allowed
+     * @param string $column
+     * @param array  $allowed
      *
      * @return ColumnDefinition
      */
@@ -379,8 +379,8 @@ trait Column
     /**
      * Create a new float column on the table.
      *
-     * @param  string  $column
-     * @param  int     $precision
+     * @param string $column
+     * @param int    $precision
      *
      * @return ColumnDefinition
      */
@@ -396,7 +396,7 @@ trait Column
     /**
      * Create a new medium text column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -412,7 +412,7 @@ trait Column
     /**
      * Create a new json column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -428,8 +428,8 @@ trait Column
     /**
      * Create a new time column on the table.
      *
-     * @param  string    $column
-     * @param  int|null  $precision
+     * @param string   $column
+     * @param int|null $precision
      *
      * @return ColumnDefinition
      */
@@ -445,8 +445,8 @@ trait Column
     /**
      * Create a new timestamp (with timezone) column on the table.
      *
-     * @param  string    $column
-     * @param  int|null  $precision
+     * @param string   $column
+     * @param int|null $precision
      *
      * @return ColumnDefinition
      */
@@ -462,7 +462,7 @@ trait Column
     /**
      * Create a new geometry column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -478,7 +478,7 @@ trait Column
     /**
      * Create a new point column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -494,7 +494,7 @@ trait Column
     /**
      * Create a new polygon column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -510,7 +510,7 @@ trait Column
     /**
      * Create a new MAC address column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
@@ -526,7 +526,7 @@ trait Column
     /**
      * Create a new auto-incrementing medium integer (3-byte) column on the table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return ColumnDefinition
      */
