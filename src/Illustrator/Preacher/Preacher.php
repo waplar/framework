@@ -3,6 +3,7 @@
 namespace Illustrator\Preacher;
 
 use Closure;
+use Illustrator\Preacher\Constants\DefaultSetting;
 use stdClass;
 
 class Preacher
@@ -24,17 +25,20 @@ class Preacher
     /**
      * @param string $msg
      * @param int    $statusCode
+     * @param array  $msgI18nReplace
      *
      * @return Builder
      */
     public static function basic(
         string $msg = Constants\DefaultSetting::MSG,
-        int $statusCode = Constants\DefaultSetting::STATUS_CODE
+        int $statusCode = Constants\DefaultSetting::STATUS_CODE,
+        array $msgI18nReplace = []
     ): Builder {
         return new Builder(
             hook: self::getHook(),
             msg: $msg,
-            statusCode: $statusCode
+            statusCode: $statusCode,
+            msgI18nReplace: $msgI18nReplace
         );
     }
 
@@ -77,12 +81,15 @@ class Preacher
     }
 
     /**
-     * @return Closure
+     * @return Closure(string $msg, array $data, Builder $builder): array
      */
     private static function getHook(): Closure
     {
-        return self::$hook ?? function (string $msg, array $data) {
-            return [$msg, $data];
+        return self::$hook ?? function (string $msg, array $data, Builder $builder) {
+            return [
+                DefaultSetting::KEY_MESSAGE => $msg,
+                DefaultSetting::KEY_DATA => $data,
+            ];
         };
     }
 
