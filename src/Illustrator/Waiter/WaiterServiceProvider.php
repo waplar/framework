@@ -44,7 +44,7 @@ class WaiterServiceProvider extends ServiceProvider
             return [$key => $value];
         });
 
-        $this->publishes($publishes->all(), ['waplar', 'waplar-test', 'waplar-waiter-test-case']);
+        $this->publishes($publishes->all(), ['waplar', 'waplar-test', 'waplar-test-waiter']);
     }
 
 }
