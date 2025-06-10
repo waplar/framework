@@ -26,6 +26,16 @@ class Builder
     private string $msg;
 
     /**
+     * 消息国际化键值替换
+     * Message internationalization key value replacement
+     *
+     * @link https://laravel.com/docs/12.x/localization#replacing-parameters-in-translation-strings
+     *
+     * @var array
+     */
+    private array $msgI18nReplace;
+
+    /**
      * @var array
      */
     private array $data = [];
@@ -49,16 +59,39 @@ class Builder
      * @param Closure $hook
      * @param string  $msg
      * @param int     $statusCode
+     * @param array   $msgI18nReplace
      */
     public function __construct(
         Closure $hook,
         string $msg = Constants\DefaultSetting::MSG,
-        int $statusCode = Constants\DefaultSetting::STATUS_CODE
+        int $statusCode = Constants\DefaultSetting::STATUS_CODE,
+        array $msgI18nReplace = []
     ) {
         $this->setHook($hook);
         $this->setMsg($msg);
         $this->setStatusCode($statusCode);
         $this->setJsonResponse();
+        $this->setMsgI18nReplace($msgI18nReplace);
+    }
+
+    /**
+     * @param array $values
+     *
+     * @return static
+     */
+    public function setMsgI18nReplace(array $values): static
+    {
+        $this->msgI18nReplace = $values;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMsgI18nReplace(): array
+    {
+        return $this->msgI18nReplace;
     }
 
     /**
@@ -178,17 +211,6 @@ class Builder
     }
 
     /**
-     * @return Export
-     */
-    public function export(): Export
-    {
-        return new Export(array_merge([
-            Constants\DefaultSetting::KEY_STATUS_CODE => $this->getStatusCode(),
-            Constants\DefaultSetting::KEY_MESSAGE => $this->getMsg(),
-        ], $this->getData()));
-    }
-
-    /**
      * @return int
      */
     public function getStatusCode(): int
@@ -215,7 +237,8 @@ class Builder
     {
         return $this->getHook()(
             $this->msg,
-            $this->data
+            $this->data,
+            $this
         )[DefaultSetting::KEY_MESSAGE] ?? $this->msg;
     }
 
@@ -238,7 +261,8 @@ class Builder
     {
         return $this->getHook()(
             $this->msg,
-            $this->data
+            $this->data,
+            $this
         )[DefaultSetting::KEY_DATA] ?? $this->data;
     }
 

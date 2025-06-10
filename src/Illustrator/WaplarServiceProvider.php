@@ -33,6 +33,7 @@ class WaplarServiceProvider extends ServiceProvider
     }
 
     /**
+     * 引导服务（服务启动时执行）
      * Bootstrap service
      */
     public function boot(): void
@@ -43,6 +44,10 @@ class WaplarServiceProvider extends ServiceProvider
         ], ['waplar', 'waplar-config']);
     }
 
+    /**
+     * 注册服务提供者
+     * Register service provider
+     */
     protected function registerProviders(): void
     {
         collect($this->providers)->map(function (string $provider) {
